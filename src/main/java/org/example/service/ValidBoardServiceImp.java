@@ -10,6 +10,7 @@ public class ValidBoardServiceImp implements ValidBoardService{
         if (pawnLocation.length()>2||expectPawnLocation.length()>2){
             throw new DataException("Wrong location !");
         }
+
     }
 
     @Override

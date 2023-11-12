@@ -41,7 +41,7 @@ public abstract class PawnAbstract implements Piece {
         {
             chessBoardServiceImp.updatePosition(start, end);
             CoordinateLetter = end.charAt(0);
-            CoordinateNumber = end.charAt(1);
+            CoordinateNumber = end.charAt(1)-'0';
             ItsFirstMove = false;
         }
 

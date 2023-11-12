@@ -1,7 +1,5 @@
 package org.example.Pieces;
 
-import lombok.Data;
-import lombok.Getter;
 import org.example.model.ChessBoard;
 import org.example.model.Color;
 import org.example.service.ChessBoardService;
