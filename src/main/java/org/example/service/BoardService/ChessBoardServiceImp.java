@@ -55,7 +55,7 @@ public class ChessBoardServiceImp implements ChessBoardService {
     @Override
     public boolean isFieldOccupied(String pawnLocation) {
         return chessBoard.getPieces().stream().anyMatch(piece -> piece.getCoordinateLetter() == pawnLocation.charAt(0) && piece.getCoordinateNumber() == pawnLocation.charAt(1) - '0');
-
+//TODO -> moze isc do serwisu opartego o sama liste pionkow
     }
 
     @Override
@@ -144,6 +144,7 @@ public class ChessBoardServiceImp implements ChessBoardService {
         return pieces.stream()
                 .filter(p -> p.getCoordinateLetter() == cordLetter && p.getCoordinateNumber() == cordNumber)
                 .findFirst();
+    //TODO -> moze isc do serwisu opartego o sama liste pionkow ALE  sie przydaje ta metoda tutaj do pierwszej walidacji w klasie game
     }
     private void removePawn(String pawnLocation) {
         int indexLetter = getIndexLetter(pawnLocation.charAt(0));
