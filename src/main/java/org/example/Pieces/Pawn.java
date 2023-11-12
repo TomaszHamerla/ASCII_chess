@@ -1,8 +1,7 @@
 package org.example.Pieces;
 
-import org.example.model.ChessBoard;
 import org.example.model.Color;
-import org.example.service.ChessBoardService;
+import org.example.service.BoardService.ChessBoardService;
 
 public class Pawn extends PawnAbstract
 {

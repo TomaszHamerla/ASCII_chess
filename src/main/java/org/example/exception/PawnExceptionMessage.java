@@ -13,9 +13,8 @@ public enum PawnExceptionMessage {
     private String message;
 
     PawnExceptionMessage(String message) {
-        this.message=message;
+        this.message = message;
     }
-
 
 
 }

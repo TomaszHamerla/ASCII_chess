@@ -1,12 +1,13 @@
-package org.example.service;
+package org.example.service.BoardService;
 
 public interface ChessBoardService {
     void printChessBoard(char[][] chessBoard);
     void updatePosition(String pawnLocation, String expectPawnLocation);
-    void removePawn(String pawnLocation);
-    char getFigure(String pawnLocation);
-    int getIndexLetter(char letter);
-    int getIndexNumber(int num);
+
     boolean isFieldOccupied(String pawnLocation);
     void movePiece(String pawnLocation, String expectPawnLocation);
+
+    void validPawnLocation(String pawnLocation);
+
+    void validExpectPawnLocation(String expectPawnLocation);
 }

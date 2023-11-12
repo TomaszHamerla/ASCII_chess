@@ -4,10 +4,8 @@ import org.example.Pieces.Piece;
 import org.example.Pieces.Pawn;
 import org.example.model.ChessBoard;
 import org.example.model.Color;
-import org.example.service.ChessBoardService;
-import org.example.service.ChessBoardServiceImp;
-import org.example.service.ValidBoardService;
-import org.example.service.ValidBoardServiceImp;
+import org.example.service.BoardService.ChessBoardService;
+import org.example.service.BoardService.ChessBoardServiceImp;
 
 import java.util.List;
 
@@ -17,9 +15,8 @@ public class Main {
 
 //Dependency injection
         ChessBoard chessBoard = new ChessBoard();
-        ValidBoardService validBoardService = new ValidBoardServiceImp(chessBoard);
-        ChessBoardService chessBoardService = new ChessBoardServiceImp(chessBoard, validBoardService);
-        Game game = new Game(chessBoardService, chessBoard, validBoardService);
+        ChessBoardService chessBoardService = new ChessBoardServiceImp(chessBoard);
+        Game game = new Game(chessBoardService, chessBoard);
         List<Piece> test = List.of(
                 new Pawn (chessBoardService, Color.WHITE,'B', 2),
                 new Pawn (chessBoardService, Color.WHITE,'C', 2),
@@ -42,12 +39,13 @@ public class Main {
 
 
 //preparing game
-        System.out.print("The game running");
-        for (int i = 0; i < 5; i++) {
-            System.out.print(" .");
-            Thread.sleep(600);
-        }
-        System.out.println();
+
+//        System.out.print("The game running");
+//        for (int i = 0; i < 5; i++) {
+//            System.out.print(" .");
+//            Thread.sleep(600);
+//        }
+//        System.out.println();
 //start game
         game.run();
 

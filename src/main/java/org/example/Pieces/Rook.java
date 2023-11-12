@@ -3,7 +3,7 @@ package org.example.Pieces;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.example.model.Color;
-import org.example.service.ChessBoardService;
+import org.example.service.BoardService.ChessBoardService;
 
 @Data
 @AllArgsConstructor

@@ -3,8 +3,7 @@ package org.example;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.example.model.ChessBoard;
-import org.example.service.ChessBoardService;
-import org.example.service.ValidBoardService;
+import org.example.service.BoardService.ChessBoardService;
 
 import java.util.Scanner;
 
@@ -13,14 +12,7 @@ import java.util.Scanner;
 public class Game {
     private final ChessBoardService chessBoardService;
     private final ChessBoard chessBoard;
-    private final ValidBoardService validBoardService;
     private boolean gameOver=true;
-
-
-    //TODO List<Pionkow> ----!Maciek!
-    // private List<"pionek">"pionki
-
-
 
     public void run() {
 
@@ -32,11 +24,16 @@ public class Game {
                Scanner src = new Scanner(System.in);
                System.out.print("Enter pawn location: ");
                String pawnLocation= src.nextLine();
+               chessBoardService.validPawnLocation(pawnLocation.toUpperCase());
+
                System.out.print("Enter expect pawn location: ");
                String expectPawnLocation= src.nextLine();
-               validBoardService.validLocations(pawnLocation,expectPawnLocation);
-               chessBoardService.movePiece(pawnLocation,expectPawnLocation);
+               chessBoardService.validExpectPawnLocation(expectPawnLocation.toUpperCase());
+
+               chessBoardService.movePiece(pawnLocation.toUpperCase(),expectPawnLocation.toUpperCase());
+
                chessBoardService.printChessBoard(chessBoard.getChessBoard());
+
                chessBoard.setWhiteTurn(!chessBoard.isWhiteTurn());
            }catch (Exception e){
                System.out.println(e.getMessage());
@@ -44,7 +41,7 @@ public class Game {
            }
        }while(gameOver);
     }
-    void printTurn(){
+   private void printTurn(){
         if (chessBoard.isWhiteTurn()){
             System.out.println("Its whites turn");
         }else
