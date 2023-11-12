@@ -68,18 +68,8 @@ public abstract class PawnAbstract implements Piece {
         }
         return true;
     }
-
-    public static List<String> getFieldsBetween(String startField, String endField) {
-        List<String> fieldsToValidate = new ArrayList<>();
-        int startRow = Integer.parseInt(startField.substring(1));
-        int endRow = Integer.parseInt(endField.substring(1));
-
-        for (int i = Math.min(startRow, endRow) + 1; i <= Math.max(startRow, endRow); i++) {
-            fieldsToValidate.add(startField.charAt(0) + String.valueOf(i));
-        }
-        return fieldsToValidate;
-    }
-    private boolean isMoveValid (String start, String end) {
+    @Override
+    public boolean isMoveValid (String start, String end) {
         return isValidLetter(start, end) && isValidNumber(start, end) && areFieldsOccupied(start, end);
     }
 }
