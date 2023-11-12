@@ -66,8 +66,9 @@ public abstract class PawnAbstract implements Piece {
         }
         return true;
     }
+    @Override
 
-    private boolean isMoveValid (String start, String end) {
+    public boolean isMoveValid (String start, String end) {
         return isValidLetter(start, end) && isValidNumber(start, end) && areFieldsOccupied(start, end);
     }
 }
