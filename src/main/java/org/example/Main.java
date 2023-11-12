@@ -21,22 +21,22 @@ public class Main {
         ChessBoardService chessBoardService = new ChessBoardServiceImp(chessBoard, validBoardService);
         Game game = new Game(chessBoardService, chessBoard, validBoardService);
         List<Piece> test = List.of(
-                new Pawn (chessBoard, chessBoardService, Color.WHITE,'A', 2),
-                new Pawn (chessBoard, chessBoardService, Color.WHITE,'B', 2),
-                new Pawn (chessBoard, chessBoardService, Color.WHITE,'C', 2),
-                new Pawn (chessBoard, chessBoardService, Color.WHITE,'D', 2),
-                new Pawn (chessBoard, chessBoardService, Color.WHITE,'E', 2),
-                new Pawn (chessBoard, chessBoardService, Color.WHITE,'F', 2),
-                new Pawn (chessBoard, chessBoardService, Color.WHITE,'G', 2),
-                new Pawn (chessBoard, chessBoardService, Color.WHITE,'H', 2),
-                new Pawn (chessBoard, chessBoardService, Color.BLACK,'A', 3),
-                new Pawn (chessBoard, chessBoardService, Color.BLACK,'B', 4),
-                new Pawn (chessBoard, chessBoardService, Color.BLACK,'C', 5),
-                new Pawn (chessBoard, chessBoardService, Color.BLACK,'D', 7),
-                new Pawn (chessBoard, chessBoardService, Color.BLACK,'E', 7),
-                new Pawn (chessBoard, chessBoardService, Color.BLACK,'F', 7),
-                new Pawn (chessBoard, chessBoardService, Color.BLACK,'G', 7),
-                new Pawn (chessBoard, chessBoardService, Color.BLACK,'H', 7)
+                new Pawn (chessBoardService, Color.WHITE,'B', 2),
+                new Pawn (chessBoardService, Color.WHITE,'C', 2),
+                new Pawn (chessBoardService, Color.WHITE,'A', 2),
+                new Pawn (chessBoardService, Color.WHITE,'D', 2),
+                new Pawn (chessBoardService, Color.WHITE,'E', 2),
+                new Pawn (chessBoardService, Color.WHITE,'F', 2),
+                new Pawn (chessBoardService, Color.WHITE,'G', 2),
+                new Pawn (chessBoardService, Color.WHITE,'H', 2),
+                new Pawn (chessBoardService, Color.BLACK,'A', 3),
+                new Pawn (chessBoardService, Color.BLACK,'B', 4),
+                new Pawn (chessBoardService, Color.BLACK,'C', 5),
+                new Pawn (chessBoardService, Color.BLACK,'D', 7),
+                new Pawn (chessBoardService, Color.BLACK,'E', 7),
+                new Pawn (chessBoardService, Color.BLACK,'F', 7),
+                new Pawn (chessBoardService, Color.BLACK,'G', 7),
+                new Pawn (chessBoardService, Color.BLACK,'H', 7)
         );
         chessBoard.setPieces(test);
 

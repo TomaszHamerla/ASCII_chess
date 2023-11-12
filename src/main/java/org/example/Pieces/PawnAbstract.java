@@ -12,11 +12,9 @@ import java.util.List;
 @Data
 public abstract class PawnAbstract implements Piece {
 
-    private final ChessBoard chessBoard;
     private final ChessBoardService chessBoardServiceImp;
 
-    public PawnAbstract(ChessBoard chessBoard, ChessBoardService chessBoardServiceImp, Color color, char CoordinateLetter, int CoordinateNumber ) {
-        this.chessBoard = chessBoard;
+    public PawnAbstract( ChessBoardService chessBoardServiceImp, Color color, char CoordinateLetter, int CoordinateNumber ) {
         this.chessBoardServiceImp = chessBoardServiceImp;
         this.color = color;
         this.ItsFirstMove = true;
@@ -48,10 +46,9 @@ public abstract class PawnAbstract implements Piece {
         }
 
 
-
     }
     private boolean isValidLetter (String start, String end) {
-        return start.charAt(0) == end.charAt(0);
+        return start.charAt(0) == end.charAt(0) || start.charAt(0) == end.charAt(0) + 1 || start.charAt(0) == end.charAt(0) - 1;
     }
     private boolean isValidNumber(String start, String end) {
         if (color == Color.WHITE) {
@@ -63,12 +60,15 @@ public abstract class PawnAbstract implements Piece {
     private boolean areFieldsOccupied(String start, String end) {
         for (String field : getFieldsBetween(start, end)) {
             if (chessBoardServiceImp.isFieldOccupied(field)) {
+                // jesli jest to bicie to ok
+                if (start.charAt(0) == end.charAt(0) + 1 || start.charAt(0) == end.charAt(0) - 1) {
+                    return true;
+                }
                 return false;
             }
         }
         return true;
     }
-
     public static List<String> getFieldsBetween(String startField, String endField) {
         List<String> fieldsToValidate = new ArrayList<>();
         int startRow = Integer.parseInt(startField.substring(1));
@@ -79,7 +79,8 @@ public abstract class PawnAbstract implements Piece {
         }
         return fieldsToValidate;
     }
-    private boolean isMoveValid (String start, String end) {
+    @Override
+    public boolean isMoveValid (String start, String end) {
         return isValidLetter(start, end) && isValidNumber(start, end) && areFieldsOccupied(start, end);
     }
 }

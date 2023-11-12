@@ -80,6 +80,7 @@ public class ChessBoardServiceImp implements ChessBoardService {
         validBoardService.validPawnLocation(figure);
         return figure;
     }
+    @Override
     public boolean isFieldOccupied(String pawnLocation) {
         return chessBoard.getPieces().stream().anyMatch(piece -> piece.getCoordinateLetter() == pawnLocation.charAt(0) && piece.getCoordinateNumber() == pawnLocation.charAt(1) - '0');
 

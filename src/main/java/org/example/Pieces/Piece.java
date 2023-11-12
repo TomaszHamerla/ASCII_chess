@@ -7,4 +7,5 @@ public interface Piece {
      char getCoordinateLetter();
      int getCoordinateNumber();
      Color getColor();
+     boolean isMoveValid (String start, String end);
 }
