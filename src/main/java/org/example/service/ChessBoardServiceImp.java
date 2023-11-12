@@ -1,9 +1,12 @@
 package org.example.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.Pieces.Piece;
 import org.example.exception.PawnException;
 import org.example.exception.PawnExceptionMessage;
 import org.example.model.ChessBoard;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 public class ChessBoardServiceImp implements ChessBoardService {
@@ -27,13 +30,28 @@ public class ChessBoardServiceImp implements ChessBoardService {
         for (char c = 'A'; c < 'I'; c++) {
             System.out.print(c + " ");
         }
+            System.out.println();
     }
+
+    @Override
+    public void movePiece(String pawnLocation, String expectPawnLocation) {
+        pawnLocation = pawnLocation.toUpperCase();
+        expectPawnLocation = expectPawnLocation.toUpperCase();
+        char cordLetter = pawnLocation.charAt(0);
+        int cordNumber = pawnLocation.charAt(1) - '0';
+        List<Piece> pieces = chessBoard.getPieces();
+        pieces.stream()
+                .filter(piece -> piece.getCoordinateLetter() == cordLetter && piece.getCoordinateNumber() == cordNumber)
+                .findFirst()
+                .orElseThrow(() -> new PawnException(PawnExceptionMessage.PAWN_NOT_FOUND))
+                .Move(pawnLocation, expectPawnLocation);
+    }
+
 
     @Override
     public void updatePosition(String pawnLocation, String expectPawnLocation) {
         char figure = getFigure(pawnLocation); //pobiera figure albo rzuca wyjatek --sprawdz package exception
         removePawn(pawnLocation); //zamienia pionke na puste pole '-'
-        //TODO !Maciek! - validacja do pionka czy moze sie tak poruszac - ja troche rozbilem te metody wyzej , metoda getFigure przyda sie -mozna ja zmienic
         int expectIndexLetter = getIndexLetter(expectPawnLocation.charAt(0));
         int expectIndexNumber = getIndexNumber(expectPawnLocation.charAt(1) - '0');
         chessBoard.getChessBoard()[expectIndexNumber][expectIndexLetter] = figure;
@@ -53,6 +71,12 @@ public class ChessBoardServiceImp implements ChessBoardService {
         char figure = chessBoard.getChessBoard()[indexNumber][indexLetter];
         validBoardService.validPawnLocation(figure);
         return figure;
+    }
+    public boolean isFieldOccupied(String pawnLocation) {
+        int indexLetter = getIndexLetter(pawnLocation.charAt(0));
+        int indexNumber = getIndexNumber(pawnLocation.charAt(1) - '0');
+        char figure = chessBoard.getChessBoard()[indexNumber][indexLetter];
+        return figure != '-';
     }
 
     @Override

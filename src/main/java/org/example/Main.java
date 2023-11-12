@@ -1,10 +1,15 @@
 package org.example;
 
+import org.example.Pieces.Piece;
+import org.example.Pieces.Pawn;
 import org.example.model.ChessBoard;
+import org.example.model.Color;
 import org.example.service.ChessBoardService;
 import org.example.service.ChessBoardServiceImp;
 import org.example.service.ValidBoardService;
 import org.example.service.ValidBoardServiceImp;
+
+import java.util.List;
 
 public class Main {
 
@@ -15,6 +20,15 @@ public class Main {
         ValidBoardService validBoardService = new ValidBoardServiceImp();
         ChessBoardService chessBoardService = new ChessBoardServiceImp(chessBoard, validBoardService);
         Game game = new Game(chessBoardService, chessBoard, validBoardService);
+        List<Piece> test = List.of(
+                new Pawn (chessBoard, chessBoardService, Color.WHITE,'A', 2),
+                new Pawn (chessBoard, chessBoardService, Color.WHITE,'B', 2),
+                new Pawn (chessBoard, chessBoardService, Color.WHITE,'C', 2),
+                new Pawn (chessBoard, chessBoardService, Color.BLACK,'B', 3),
+                new Pawn (chessBoard, chessBoardService, Color.BLACK,'C', 4)
+        );
+        chessBoard.setPieces(test);
+
 
 //preparing game
         System.out.print("The game running");

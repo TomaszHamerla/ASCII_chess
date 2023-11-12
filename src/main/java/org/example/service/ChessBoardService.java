@@ -7,5 +7,6 @@ public interface ChessBoardService {
     char getFigure(String pawnLocation);
     int getIndexLetter(char letter);
     int getIndexNumber(int num);
-
+    boolean isFieldOccupied(String pawnLocation);
+    void movePiece(String pawnLocation, String expectPawnLocation);
 }

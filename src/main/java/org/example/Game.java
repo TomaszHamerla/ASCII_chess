@@ -25,11 +25,13 @@ public class Game {
 
            try {
                Scanner src = new Scanner(System.in);
+               System.out.print("Enter pawn location: ");
                String pawnLocation= src.nextLine();
+               System.out.print("Enter expect pawn location: ");
                String expectPawnLocation= src.nextLine();
                validBoardService.validLocations(pawnLocation,expectPawnLocation);
-               chessBoardService.updatePosition(pawnLocation.toUpperCase(),expectPawnLocation.toUpperCase());
-
+               //TODO TOMEK validacja do poprawy  sprawdz czy input to jest litera od A do H i cyfra od 1 do 8
+               chessBoardService.movePiece(pawnLocation,expectPawnLocation);
                chessBoardService.printChessBoard(chessBoard.getChessBoard());
            }catch (Exception e){
                System.out.println(e.getMessage());

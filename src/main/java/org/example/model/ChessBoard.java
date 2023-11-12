@@ -1,6 +1,9 @@
 package org.example.model;
 
 import lombok.Data;
+import org.example.Pieces.Piece;
+
+import java.util.List;
 
 @Data
 public class ChessBoard {
@@ -14,4 +17,5 @@ public class ChessBoard {
         {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
         {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'}
     };
+    private List<Piece> pieces;
 }
