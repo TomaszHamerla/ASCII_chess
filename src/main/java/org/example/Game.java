@@ -37,6 +37,7 @@ public class Game {
                validBoardService.validLocations(pawnLocation,expectPawnLocation);
                chessBoardService.movePiece(pawnLocation,expectPawnLocation);
                chessBoardService.printChessBoard(chessBoard.getChessBoard());
+               chessBoard.setWhiteTurn(!chessBoard.isWhiteTurn());
            }catch (Exception e){
                System.out.println(e.getMessage());
                System.out.println("Pleas try again");

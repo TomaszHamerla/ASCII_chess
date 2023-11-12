@@ -6,9 +6,9 @@ import org.example.exception.PawnException;
 import org.example.exception.PawnExceptionMessage;
 import org.example.model.ChessBoard;
 
-import java.awt.dnd.InvalidDnDOperationException;
-import java.util.ArrayList;
+
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 
@@ -39,20 +39,28 @@ public class ChessBoardServiceImp implements ChessBoardService {
 
     @Override
     public void movePiece(String pawnLocation, String expectPawnLocation) {
+        Optional<Piece> piece = getPiece(pawnLocation);
+        if (piece.isPresent()){
+            if (validBoardService.validTurn(piece.get().getColor())){
+                piece.get().Move(pawnLocation.toUpperCase(),expectPawnLocation.toUpperCase());
+            }   else
+                throw new PawnException(PawnExceptionMessage.INVALID_TURN_MOVE);
+        }else
+           throw  new PawnException(PawnExceptionMessage.PAWN_NOT_FOUND);
+
+
+
+
+    }
+
+    private Optional<Piece> getPiece(String pawnLocation) {
         pawnLocation = pawnLocation.toUpperCase();
-        expectPawnLocation = expectPawnLocation.toUpperCase();
         char cordLetter = pawnLocation.charAt(0);
         int cordNumber = pawnLocation.charAt(1) - '0';
         List<Piece> pieces = chessBoard.getPieces();
-        Piece piece = pieces.stream()
+       return pieces.stream()
                 .filter(p -> p.getCoordinateLetter() == cordLetter && p.getCoordinateNumber() == cordNumber)
-                .findFirst()
-                .orElseThrow(() -> new PawnException(PawnExceptionMessage.PAWN_NOT_FOUND));
-        if (validBoardService.validTurn(piece.getColor())){
-            piece.Move(pawnLocation,expectPawnLocation);
-        } else  {
-            System.out.println("You can not use the opponent piece !");
-        }
+                .findFirst();
     }
 
 

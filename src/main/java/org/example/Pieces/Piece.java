@@ -8,4 +8,5 @@ public interface Piece {
      int getCoordinateNumber();
      Color getColor();
      boolean isMoveValid (String start, String end);
+
 }
