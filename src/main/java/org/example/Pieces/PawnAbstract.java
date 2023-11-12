@@ -23,7 +23,6 @@ public abstract class PawnAbstract implements Piece {
         this.isCaptured = false;
 
     }
-
     private Color color;
     private boolean ItsFirstMove;
     private char CoordinateLetter;
@@ -32,7 +31,6 @@ public abstract class PawnAbstract implements Piece {
     private boolean isCaptured;
     @Override
     public void Move(String start, String end) {
-
         if (!isMoveValid(start, end))
         {
             throw new PawnException(PawnExceptionMessage.INVALID_MOVE);
@@ -44,8 +42,6 @@ public abstract class PawnAbstract implements Piece {
             CoordinateNumber = end.charAt(1)-'0';
             ItsFirstMove = false;
         }
-
-
     }
     private boolean isValidLetter (String start, String end) {
         return start.charAt(0) == end.charAt(0) || start.charAt(0) == end.charAt(0) + 1 || start.charAt(0) == end.charAt(0) - 1;
@@ -69,7 +65,7 @@ public abstract class PawnAbstract implements Piece {
         }
         return true;
     }
-    public static List<String> getFieldsBetween(String startField, String endField) {
+    public List<String> getFieldsBetween(String startField, String endField) {
         List<String> fieldsToValidate = new ArrayList<>();
         int startRow = Integer.parseInt(startField.substring(1));
         int endRow = Integer.parseInt(endField.substring(1));
