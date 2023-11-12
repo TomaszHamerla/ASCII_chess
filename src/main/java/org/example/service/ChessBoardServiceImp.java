@@ -6,6 +6,8 @@ import org.example.exception.PawnException;
 import org.example.exception.PawnExceptionMessage;
 import org.example.model.ChessBoard;
 
+import java.awt.dnd.InvalidDnDOperationException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -79,12 +81,9 @@ public class ChessBoardServiceImp implements ChessBoardService {
         return figure;
     }
     public boolean isFieldOccupied(String pawnLocation) {
-        int indexLetter = getIndexLetter(pawnLocation.charAt(0));
-        int indexNumber = getIndexNumber(pawnLocation.charAt(1) - '0');
-        char figure = chessBoard.getChessBoard()[indexNumber][indexLetter];
-        return figure != '-';
-    }
+        return chessBoard.getPieces().stream().anyMatch(piece -> piece.getCoordinateLetter() == pawnLocation.charAt(0) && piece.getCoordinateNumber() == pawnLocation.charAt(1) - '0');
 
+    }
     @Override
     public int getIndexLetter(char letter) {
         switch (letter) {

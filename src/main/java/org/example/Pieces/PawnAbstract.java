@@ -6,6 +6,8 @@ import org.example.exception.PawnExceptionMessage;
 import org.example.model.ChessBoard;
 import org.example.model.Color;
 import org.example.service.ChessBoardService;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public abstract class PawnAbstract implements Piece {
@@ -58,16 +60,15 @@ public abstract class PawnAbstract implements Piece {
             return end.charAt(1) == start.charAt(1) - 1 || (ItsFirstMove && end.charAt(1) == start.charAt(1) - 2);
         }
     }
-    private boolean areFieldsOccupied (String start, String end) {
-        for (int i = start.charAt(1); i <= end.charAt(1); i++) {
-            if (chessBoardServiceImp.isFieldOccupied(start.charAt(0) + String.valueOf(i))) {
+    private boolean areFieldsOccupied(String start, String end) {
+        for (String field : getFieldsBetween(start, end)) {
+            if (chessBoardServiceImp.isFieldOccupied(field)) {
                 return false;
             }
         }
         return true;
     }
     @Override
-
     public boolean isMoveValid (String start, String end) {
         return isValidLetter(start, end) && isValidNumber(start, end) && areFieldsOccupied(start, end);
     }
