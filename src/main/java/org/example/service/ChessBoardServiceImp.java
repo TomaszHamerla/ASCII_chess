@@ -9,9 +9,11 @@ import org.example.model.ChessBoard;
 import java.util.List;
 
 @RequiredArgsConstructor
+
 public class ChessBoardServiceImp implements ChessBoardService {
     private final ChessBoard chessBoard;
     private final ValidBoardService validBoardService;
+
 
     @Override
     public void printChessBoard(char[][] chessBoard) {
@@ -40,11 +42,15 @@ public class ChessBoardServiceImp implements ChessBoardService {
         char cordLetter = pawnLocation.charAt(0);
         int cordNumber = pawnLocation.charAt(1) - '0';
         List<Piece> pieces = chessBoard.getPieces();
-        pieces.stream()
-                .filter(piece -> piece.getCoordinateLetter() == cordLetter && piece.getCoordinateNumber() == cordNumber)
+        Piece piece = pieces.stream()
+                .filter(p -> p.getCoordinateLetter() == cordLetter && p.getCoordinateNumber() == cordNumber)
                 .findFirst()
-                .orElseThrow(() -> new PawnException(PawnExceptionMessage.PAWN_NOT_FOUND))
-                .Move(pawnLocation, expectPawnLocation);
+                .orElseThrow(() -> new PawnException(PawnExceptionMessage.PAWN_NOT_FOUND));
+        if (validBoardService.validTurn(piece.getColor())){
+            piece.Move(pawnLocation,expectPawnLocation);
+        } else  {
+            System.out.println("You can not use the opponent piece !");
+        }
     }
 
 

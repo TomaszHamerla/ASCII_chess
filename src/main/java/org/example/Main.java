@@ -17,7 +17,7 @@ public class Main {
 
 //Dependency injection
         ChessBoard chessBoard = new ChessBoard();
-        ValidBoardService validBoardService = new ValidBoardServiceImp();
+        ValidBoardService validBoardService = new ValidBoardServiceImp(chessBoard);
         ChessBoardService chessBoardService = new ChessBoardServiceImp(chessBoard, validBoardService);
         Game game = new Game(chessBoardService, chessBoard, validBoardService);
         List<Piece> test = List.of(

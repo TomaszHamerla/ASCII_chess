@@ -18,4 +18,5 @@ public class ChessBoard {
         {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'}
     };
     private List<Piece> pieces;
+    private boolean whiteTurn= true;
 }
