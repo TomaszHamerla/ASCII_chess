@@ -33,6 +33,9 @@ public abstract class PawnAbstract implements Piece {
 
     @Override
     public void Move(String start, String end) {
+        if (chessBoardServiceImp.getPiece(start).isEmpty()){
+            throw new PawnException(PawnExceptionMessage.PAWN_NOT_FOUND);
+        }
         if (!isMoveValid(start, end)) {
             throw new PawnException(PawnExceptionMessage.INVALID_MOVE);
         } else {
@@ -56,25 +59,38 @@ public abstract class PawnAbstract implements Piece {
     }
 
     private boolean areFieldsOccupied(String start, String end) {
+        boolean result = true;
         for (String field : getFieldsBetween(start, end)) {
             if (chessBoardServiceImp.isFieldOccupied(field)) {
-                // jesli jest to bicie to ok
-                if (start.charAt(0) == end.charAt(0) + 1 || start.charAt(0) == end.charAt(0) - 1) {
-                    return true;
+                Piece pieceWithMakeMove = chessBoardServiceImp.getPiece(start).get();
+                Piece pieceOnField = chessBoardServiceImp.getPiece(field).get();
+                if (pieceWithMakeMove.getColor() == pieceOnField.getColor() || start.charAt(0) == end.charAt(0)){
+                    result = false;
                 }
-                return false;
             }
         }
-        return true;
+        return result;
     }
 
     private List<String> getFieldsBetween(String startField, String endField) {
+        Piece piece = chessBoardServiceImp.getPiece(startField).get();
+        if(startField.charAt(0) != endField.charAt(0)) {
+            return List.of(endField);
+        }
+
         List<String> fieldsToValidate = new ArrayList<>();
         int startRow = Integer.parseInt(startField.substring(1));
         int endRow = Integer.parseInt(endField.substring(1));
 
-        for (int i = Math.min(startRow, endRow) + 1; i <= Math.max(startRow, endRow); i++) {
-            fieldsToValidate.add(startField.charAt(0) + String.valueOf(i));
+        if (piece.getColor() == Color.WHITE) {
+            for (int i = startRow + 1; i <= endRow; i++) {
+                fieldsToValidate.add(startField.charAt(0) + String.valueOf(i));
+            }
+        }
+        else {
+            for (int i = startRow - 1; i >= endRow; i--) {
+                fieldsToValidate.add(startField.charAt(0) + String.valueOf(i));
+            }
         }
         return fieldsToValidate;
     }
