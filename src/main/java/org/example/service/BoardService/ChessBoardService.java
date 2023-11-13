@@ -12,9 +12,9 @@ public interface ChessBoardService {
     boolean isFieldOccupied(String pawnLocation);
     void movePiece(String pawnLocation, String expectPawnLocation);
 
-    void validPawnLocation(String pawnLocation);
+  //  void validPawnLocation(String pawnLocation);
 
-    void validExpectPawnLocation(String expectPawnLocation);
+  //  void validExpectPawnLocation(String expectPawnLocation);
     List<Piece> getPieces();
     Optional<Piece> getPiece(String pawnLocation);
 }

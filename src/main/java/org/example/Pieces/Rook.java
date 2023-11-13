@@ -41,7 +41,7 @@ public class Rook implements Piece {
 
     private boolean isFieldsOccupied(String start, String end) {
         for (String field : getFieldsBetween(start, end)) {
-            if (end == field){
+            if (end.equals(field)){
                 if (chessBoardService.isFieldOccupied(field)){
                     Piece piece = getChessBoardService().getPiece(field).get();
                     Piece pieceFromStartLocation = chessBoardService.getPiece(start).get();
@@ -49,7 +49,7 @@ public class Rook implements Piece {
                         return true;
                     }
                     throw new PawnException(PawnExceptionMessage.INVALID_OPERATION);
-                }
+                }return true;
 
             }
             if ( chessBoardService.isFieldOccupied(field)){
@@ -65,17 +65,21 @@ public class Rook implements Piece {
             if (start.charAt(1) - '0' < end.charAt(1) - '0') {
                 for (int i = start.charAt(1) - '0' + 1; i <= end.charAt(1) - '0'; i++)
                     fieldsBetween.add(start.charAt(0) + String.valueOf(i));
-            } else
-                for (int i = end.charAt(1) - '0' - 1; i >= start.charAt(1) - '0'; i--)
-                    fieldsBetween.add(start.charAt(0) + String.valueOf(i));
+            } else{
+                for (int i = start.charAt(1) - '0' - 1; i >= end.charAt(1) - '0'; i--){
 
-        } else if (start.charAt(0) < end.charAt(0)) {
+                    fieldsBetween.add(start.charAt(0) + String.valueOf(i));
+                }
+            }
+
+
+        } if (start.charAt(0) < end.charAt(0)) {
             for (char c = (char) (start.charAt(0) + 1); c <= end.charAt(0); c++) {
-                fieldsBetween.add(String.valueOf(c + start.charAt(1)));
+                fieldsBetween.add(String.valueOf(c) + start.charAt(1));
             }
         } else
-            for (char c = (char) (end.charAt(0) - 1); c >= start.charAt(0); c--) {
-                fieldsBetween.add(String.valueOf(c + start.charAt(1)));
+            for (char c = (char) (start.charAt(0) - 1); c >= end.charAt(0); c--) {
+                fieldsBetween.add(String.valueOf(c) + start.charAt(1));
 
             }
         return fieldsBetween;

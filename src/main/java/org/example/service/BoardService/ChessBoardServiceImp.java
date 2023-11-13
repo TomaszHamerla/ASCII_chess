@@ -49,40 +49,46 @@ public class ChessBoardServiceImp implements ChessBoardService {
         removePawn(pawnLocation); //zamienia pionke na puste pole '-'
         int expectIndexLetter = getIndexLetter(expectPawnLocation.charAt(0));
         int expectIndexNumber = getIndexNumber(expectPawnLocation.charAt(1) - '0');
+
         chessBoard.getChessBoard()[expectIndexNumber][expectIndexLetter] = figure;
     }
 
+
+
     @Override
     public boolean isFieldOccupied(String pawnLocation) {
-        return chessBoard.getPieces().stream().anyMatch(piece -> piece.getCoordinateLetter() == pawnLocation.charAt(0) && piece.getCoordinateNumber() == pawnLocation.charAt(1) - '0');
+        return chessBoard.getPieces()
+                .stream()
+                .anyMatch(piece -> piece.getCoordinateLetter() == pawnLocation.charAt(0) && piece.getCoordinateNumber() == pawnLocation.charAt(1) - '0');
 //TODO -> moze isc do serwisu opartego o sama liste pionkow
     }
 
-    @Override
-    public void validPawnLocation(String pawnLocation) {
-        validLocations(pawnLocation);
-        char figure = getFigure(pawnLocation);
-        Optional<Piece> piece = getPiece(pawnLocation);
-        if (piece.isEmpty()){
-            throw new PawnException(PawnExceptionMessage.PAWN_NOT_FOUND);
-        }
-        if (!validTurn(piece.get().getColor())) {
-            throw new PawnException(PawnExceptionMessage.INVALID_TURN_MOVE);
-        }
-        if (figure == '-') {
-            throw new PawnException(PawnExceptionMessage.PAWN_LOCATION_NOT_FOUND);
-        }
+//    @Override
+//    public void validPawnLocation(String pawnLocation) {
+//        validLocations(pawnLocation);
+//        char figure = getFigure(pawnLocation);
+//        Optional<Piece> piece = getPiece(pawnLocation);
+//        if (piece.isEmpty()){
+//            throw new PawnException(PawnExceptionMessage.PAWN_NOT_FOUND);
+//        }
+//        if (!validTurn(piece.get().getColor())) {
+//            throw new PawnException(PawnExceptionMessage.INVALID_TURN_MOVE);
+//        }
+//        if (figure == '-') {
+//            throw new PawnException(PawnExceptionMessage.PAWN_LOCATION_NOT_FOUND);
+//        }
+//
+//    }
 
-    }
-
-    @Override
-    public void validExpectPawnLocation(String expectPawnLocation) {
-        validLocations(expectPawnLocation);
-        char figure = getFigure(expectPawnLocation);
-        if (figure!='-'){ //TODO tutaj dodac || flaga canHit zeby moc zbic pionka ktorego chcemy
-            throw new PawnException(PawnExceptionMessage.PAWN_LOCATION_NOT_FOUND);
-        }
-    }
+//    @Override
+//    public void validExpectPawnLocation(String expectPawnLocation) {
+//        validLocations(expectPawnLocation);
+//        char figure = getFigure(expectPawnLocation);
+//
+//        if (figure!='-'){ //TODO tutaj dodac || flaga canHit zeby moc zbic pionka ktorego chcemy
+//            throw new PawnException(PawnExceptionMessage.PAWN_LOCATION_NOT_FOUND);
+//        }
+//    }
 
     @Override
     public List<Piece> getPieces() {
@@ -99,21 +105,21 @@ public class ChessBoardServiceImp implements ChessBoardService {
                 .findFirst();
     }
 
-    private boolean validTurn(Color color) {
-        if (chessBoard.isWhiteTurn() && Color.WHITE.equals(color)) {
-            return true;
-
-        } else if (!chessBoard.isWhiteTurn() && Color.BLACK.equals(color)) {
-            return true;
-        }
-        return false;
-    }
-    private void validLocations(String location) {
-        if (location.length() > 2) {
-            throw new PawnException(PawnExceptionMessage.PAWN_LOCATION_NOT_FOUND);
-        }
-
-    }
+//    private boolean validTurn(Color color) {
+//        if (chessBoard.isWhiteTurn() && Color.WHITE.equals(color)) {
+//            return true;
+//
+//        } else if (!chessBoard.isWhiteTurn() && Color.BLACK.equals(color)) {
+//            return true;
+//        }
+//        return false;
+//    }
+//    private void validLocations(String location) {
+//        if (location.length() > 2) {
+//            throw new PawnException(PawnExceptionMessage.PAWN_LOCATION_NOT_FOUND);
+//        }
+//
+//    }
     private char getFigure(String pawnLocation) {
         int indexLetter = getIndexLetter(pawnLocation.charAt(0));
         int indexNumber = getIndexNumber(pawnLocation.charAt(1) - '0');

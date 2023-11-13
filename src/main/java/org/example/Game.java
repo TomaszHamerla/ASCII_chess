@@ -24,11 +24,11 @@ public class Game {
                Scanner src = new Scanner(System.in);
                System.out.print("Enter pawn location: ");
                String pawnLocation= src.nextLine();
-               chessBoardService.validPawnLocation(pawnLocation.toUpperCase());
+              // chessBoardService.validPawnLocation(pawnLocation.toUpperCase());
 
                System.out.print("Enter expect pawn location: ");
                String expectPawnLocation= src.nextLine();
-               chessBoardService.validExpectPawnLocation(expectPawnLocation.toUpperCase());
+              // chessBoardService.validExpectPawnLocation(expectPawnLocation.toUpperCase());
 
                chessBoardService.movePiece(pawnLocation.toUpperCase(),expectPawnLocation.toUpperCase());
 
