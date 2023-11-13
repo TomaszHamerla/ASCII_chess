@@ -84,6 +84,20 @@ public class ChessBoardServiceImp implements ChessBoardService {
         }
     }
 
+    @Override
+    public List<Piece> getPieces() {
+        return chessBoard.getPieces();
+    }
+    @Override
+    public Optional<Piece> getPiece(String pawnLocation) {
+        pawnLocation = pawnLocation.toUpperCase();
+        char cordLetter = pawnLocation.charAt(0);
+        int cordNumber = pawnLocation.charAt(1) - '0';
+        List<Piece> pieces = chessBoard.getPieces();
+        return pieces.stream()
+                .filter(p -> p.getCoordinateLetter() == cordLetter && p.getCoordinateNumber() == cordNumber)
+                .findFirst();
+    }
 
     private boolean validTurn(Color color) {
         if (chessBoard.isWhiteTurn() && Color.WHITE.equals(color)) {
@@ -136,16 +150,7 @@ public class ChessBoardServiceImp implements ChessBoardService {
         }
         return num;
     }
-    private Optional<Piece> getPiece(String pawnLocation) {
-        pawnLocation = pawnLocation.toUpperCase();
-        char cordLetter = pawnLocation.charAt(0);
-        int cordNumber = pawnLocation.charAt(1) - '0';
-        List<Piece> pieces = chessBoard.getPieces();
-        return pieces.stream()
-                .filter(p -> p.getCoordinateLetter() == cordLetter && p.getCoordinateNumber() == cordNumber)
-                .findFirst();
-    //TODO -> moze isc do serwisu opartego o sama liste pionkow ALE  sie przydaje ta metoda tutaj do pierwszej walidacji w klasie game
-    }
+
     private void removePawn(String pawnLocation) {
         int indexLetter = getIndexLetter(pawnLocation.charAt(0));
         int indexNumber = getIndexNumber(pawnLocation.charAt(1) - '0');

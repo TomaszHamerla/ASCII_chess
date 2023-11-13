@@ -5,6 +5,7 @@ import org.example.exception.PawnException;
 import org.example.exception.PawnExceptionMessage;
 import org.example.model.Color;
 import org.example.service.BoardService.ChessBoardService;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public abstract class PawnAbstract implements Piece {
 
     private final ChessBoardService chessBoardServiceImp;
 
-    public PawnAbstract( ChessBoardService chessBoardServiceImp, Color color, char CoordinateLetter, int CoordinateNumber ) {
+    public PawnAbstract(ChessBoardService chessBoardServiceImp, Color color, char CoordinateLetter, int CoordinateNumber) {
         this.chessBoardServiceImp = chessBoardServiceImp;
         this.color = color;
         this.ItsFirstMove = true;
@@ -22,29 +23,30 @@ public abstract class PawnAbstract implements Piece {
         this.isCaptured = false;
 
     }
+
     private Color color;
     private boolean ItsFirstMove;
     private char CoordinateLetter;
     private int CoordinateNumber;
     // czy pionek został zbity
     private boolean isCaptured;
+
     @Override
     public void Move(String start, String end) {
-        if (!isMoveValid(start, end))
-        {
+        if (!isMoveValid(start, end)) {
             throw new PawnException(PawnExceptionMessage.INVALID_MOVE);
-        }
-        else
-        {
+        } else {
             chessBoardServiceImp.updatePosition(start, end);
             CoordinateLetter = end.charAt(0);
-            CoordinateNumber = end.charAt(1)-'0';
+            CoordinateNumber = end.charAt(1) - '0';
             ItsFirstMove = false;
         }
     }
-    private boolean isValidLetter (String start, String end) {
+
+    private boolean isValidLetter(String start, String end) {
         return start.charAt(0) == end.charAt(0) || start.charAt(0) == end.charAt(0) + 1 || start.charAt(0) == end.charAt(0) - 1;
     }
+
     private boolean isValidNumber(String start, String end) {
         if (color == Color.WHITE) {
             return end.charAt(1) == start.charAt(1) + 1 || (ItsFirstMove && end.charAt(1) == start.charAt(1) + 2);
@@ -52,6 +54,7 @@ public abstract class PawnAbstract implements Piece {
             return end.charAt(1) == start.charAt(1) - 1 || (ItsFirstMove && end.charAt(1) == start.charAt(1) - 2);
         }
     }
+
     private boolean areFieldsOccupied(String start, String end) {
         for (String field : getFieldsBetween(start, end)) {
             if (chessBoardServiceImp.isFieldOccupied(field)) {
@@ -64,7 +67,8 @@ public abstract class PawnAbstract implements Piece {
         }
         return true;
     }
-    public List<String> getFieldsBetween(String startField, String endField) {
+
+    private List<String> getFieldsBetween(String startField, String endField) {
         List<String> fieldsToValidate = new ArrayList<>();
         int startRow = Integer.parseInt(startField.substring(1));
         int endRow = Integer.parseInt(endField.substring(1));
@@ -74,8 +78,9 @@ public abstract class PawnAbstract implements Piece {
         }
         return fieldsToValidate;
     }
+
     @Override
-    public boolean isMoveValid (String start, String end) {
+    public boolean isMoveValid(String start, String end) {
         return isValidLetter(start, end) && isValidNumber(start, end) && areFieldsOccupied(start, end);
     }
 }

@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.Pieces.Piece;
 import org.example.Pieces.Pawn;
+import org.example.Pieces.Rook;
 import org.example.model.ChessBoard;
 import org.example.model.Color;
 import org.example.service.BoardService.ChessBoardService;
@@ -33,7 +34,11 @@ public class Main {
                 new Pawn (chessBoardService, Color.BLACK,'E', 7),
                 new Pawn (chessBoardService, Color.BLACK,'F', 7),
                 new Pawn (chessBoardService, Color.BLACK,'G', 7),
-                new Pawn (chessBoardService, Color.BLACK,'H', 7)
+                new Pawn (chessBoardService, Color.BLACK,'H', 7),
+                new Rook(chessBoardService,Color.BLACK,'A',8),
+                new Rook(chessBoardService,Color.BLACK,'H',8),
+                new Rook(chessBoardService,Color.WHITE,'H',1),
+                new Rook(chessBoardService,Color.WHITE,'A',1)
         );
         chessBoard.setPieces(test);
 
