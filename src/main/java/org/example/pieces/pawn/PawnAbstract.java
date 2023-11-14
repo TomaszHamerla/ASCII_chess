@@ -1,6 +1,7 @@
-package org.example.Pieces;
+package org.example.pieces.pawn;
 
 import lombok.Data;
+import org.example.pieces.Piece;
 import org.example.exception.PawnException;
 import org.example.exception.PawnExceptionMessage;
 import org.example.model.Color;

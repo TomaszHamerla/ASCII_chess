@@ -1,7 +1,7 @@
 package org.example.service.BoardService;
 
 import lombok.RequiredArgsConstructor;
-import org.example.Pieces.Piece;
+import org.example.pieces.Piece;
 import org.example.exception.PawnException;
 import org.example.exception.PawnExceptionMessage;
 import org.example.model.ChessBoard;

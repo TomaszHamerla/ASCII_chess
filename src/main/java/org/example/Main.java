@@ -1,8 +1,8 @@
 package org.example;
 
-import org.example.Pieces.Piece;
-import org.example.Pieces.Pawn;
-import org.example.Pieces.Rook;
+import org.example.pieces.Piece;
+import org.example.pieces.pawn.Pawn;
+import org.example.pieces.rook.Rook;
 import org.example.model.ChessBoard;
 import org.example.model.Color;
 import org.example.service.BoardService.ChessBoardService;

@@ -1,7 +1,8 @@
-package org.example.Pieces;
+package org.example.pieces.rook;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.example.pieces.Piece;
 import org.example.exception.PawnException;
 import org.example.exception.PawnExceptionMessage;
 import org.example.model.Color;
@@ -9,7 +10,6 @@ import org.example.service.BoardService.ChessBoardService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Data
 @AllArgsConstructor

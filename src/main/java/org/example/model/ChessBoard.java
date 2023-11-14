@@ -1,7 +1,7 @@
 package org.example.model;
 
 import lombok.Data;
-import org.example.Pieces.Piece;
+import org.example.pieces.Piece;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package org.example.service.BoardService;
 
-import org.example.Pieces.Piece;
+import org.example.pieces.Piece;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package org.example.Pieces;
+package org.example.pieces.pawn;
 
 import org.example.model.Color;
 import org.example.service.BoardService.ChessBoardService;

@@ -1,4 +1,4 @@
-package org.example.Pieces;
+package org.example.pieces;
 
 import org.example.model.Color;
 
