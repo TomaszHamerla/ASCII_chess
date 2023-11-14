@@ -8,6 +8,7 @@ import org.example.model.Color;
 import org.example.service.BoardService.ChessBoardService;
 import org.example.service.BoardService.ChessBoardServiceImp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -18,7 +19,7 @@ public class Main {
         ChessBoard chessBoard = new ChessBoard();
         ChessBoardService chessBoardService = new ChessBoardServiceImp(chessBoard);
         Game game = new Game(chessBoardService, chessBoard);
-        List<Piece> test = List.of(
+        List<Piece> test =new ArrayList<>( List.of(
                 new Pawn (chessBoardService, Color.WHITE,'B', 2),
                 new Pawn (chessBoardService, Color.WHITE,'C', 2),
                 new Pawn (chessBoardService, Color.WHITE,'A', 2),
@@ -39,7 +40,7 @@ public class Main {
                 new Rook(chessBoardService,Color.BLACK,'H',8),
                 new Rook(chessBoardService,Color.WHITE,'H',1),
                 new Rook(chessBoardService,Color.WHITE,'A',1)
-        );
+        ));
         chessBoard.setPieces(test);
 
 

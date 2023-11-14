@@ -14,8 +14,6 @@ import java.util.Optional;
 
 public class ChessBoardServiceImp implements ChessBoardService {
     private final ChessBoard chessBoard;
-
-
     @Override
     public void printChessBoard(char[][] chessBoard) {
         int a = 8;
@@ -35,26 +33,23 @@ public class ChessBoardServiceImp implements ChessBoardService {
         }
         System.out.println();
     }
-
     @Override
     public void movePiece(String pawnLocation, String expectPawnLocation) {
-         getPiece(pawnLocation)
-                 .orElseThrow(() -> new PawnException(PawnExceptionMessage.PAWN_NOT_FOUND))
-                 .Move(pawnLocation,expectPawnLocation);
+        Piece piece = getPiece(pawnLocation)
+                .orElseThrow(() -> new PawnException(PawnExceptionMessage.PAWN_NOT_FOUND));
+        if (isEnemyOnExpectLocation(piece.getColor(),expectPawnLocation)){
+            removePiece(expectPawnLocation);
+        }
+        piece.Move(pawnLocation, expectPawnLocation);
     }
-
     @Override
     public void updatePosition(String pawnLocation, String expectPawnLocation) {
         char figure = getFigure(pawnLocation);
         removePawn(pawnLocation); //zamienia pionke na puste pole '-'
         int expectIndexLetter = getIndexLetter(expectPawnLocation.charAt(0));
         int expectIndexNumber = getIndexNumber(expectPawnLocation.charAt(1) - '0');
-
         chessBoard.getChessBoard()[expectIndexNumber][expectIndexLetter] = figure;
     }
-
-
-
     @Override
     public boolean isFieldOccupied(String pawnLocation) {
         return chessBoard.getPieces()
@@ -94,6 +89,7 @@ public class ChessBoardServiceImp implements ChessBoardService {
     public List<Piece> getPieces() {
         return chessBoard.getPieces();
     }
+
     @Override
     public Optional<Piece> getPiece(String pawnLocation) {
         pawnLocation = pawnLocation.toUpperCase();
@@ -105,7 +101,7 @@ public class ChessBoardServiceImp implements ChessBoardService {
                 .findFirst();
     }
 
-//    private boolean validTurn(Color color) {
+    //    private boolean validTurn(Color color) {
 //        if (chessBoard.isWhiteTurn() && Color.WHITE.equals(color)) {
 //            return true;
 //
@@ -120,11 +116,21 @@ public class ChessBoardServiceImp implements ChessBoardService {
 //        }
 //
 //    }
+    private void removePiece(String expectPawnLocation) {
+        Piece enemy = getPiece(expectPawnLocation).get();
+        chessBoard.getPieces().remove(enemy);
+    }
+    private boolean isEnemyOnExpectLocation(Color color, String expectPawnLocation) {
+        Optional<Piece> piece = getPiece(expectPawnLocation);
+        if (piece.isPresent()){
+            return color != piece.get().getColor();
+        }
+        return false;
+    }
     private char getFigure(String pawnLocation) {
         int indexLetter = getIndexLetter(pawnLocation.charAt(0));
         int indexNumber = getIndexNumber(pawnLocation.charAt(1) - '0');
         return chessBoard.getChessBoard()[indexNumber][indexLetter];
-
     }
     private int getIndexLetter(char letter) {
         switch (letter) {
@@ -140,8 +146,6 @@ public class ChessBoardServiceImp implements ChessBoardService {
         }
         return letter - '0';
     }
-
-
     private int getIndexNumber(int num) {
         switch (num) {
             case 8 -> num = 0;
@@ -156,12 +160,9 @@ public class ChessBoardServiceImp implements ChessBoardService {
         }
         return num;
     }
-
     private void removePawn(String pawnLocation) {
         int indexLetter = getIndexLetter(pawnLocation.charAt(0));
         int indexNumber = getIndexNumber(pawnLocation.charAt(1) - '0');
         chessBoard.getChessBoard()[indexNumber][indexLetter] = '-';
     }
-
-
 }
