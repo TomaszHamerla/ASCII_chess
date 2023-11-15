@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.pieces.Piece;
+import org.example.pieces.king.King;
 import org.example.pieces.pawn.Pawn;
 import org.example.pieces.rook.Rook;
 import org.example.model.ChessBoard;
@@ -39,7 +40,9 @@ public class Main {
                 new Rook(chessBoardService,Color.BLACK,'A',8),
                 new Rook(chessBoardService,Color.BLACK,'H',8),
                 new Rook(chessBoardService,Color.WHITE,'H',1),
-                new Rook(chessBoardService,Color.WHITE,'A',1)
+                new Rook(chessBoardService,Color.WHITE,'A',1),
+                new King(chessBoardService,Color.WHITE,'E',1),
+                new King(chessBoardService,Color.BLACK,'E',8)
         ));
         chessBoard.setPieces(test);
 
