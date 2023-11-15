@@ -34,9 +34,6 @@ public abstract class PawnAbstract implements Piece {
 
     @Override
     public void Move(String start, String end) {
-        if (chessBoardServiceImp.getPiece(start).isEmpty()){
-            throw new PawnException(PawnExceptionMessage.PAWN_NOT_FOUND);
-        }
         if (!isMoveValid(start, end)) {
             throw new PawnException(PawnExceptionMessage.INVALID_MOVE);
         } else {
@@ -65,7 +62,7 @@ public abstract class PawnAbstract implements Piece {
             if (chessBoardServiceImp.isFieldOccupied(field)) {
                 Piece pieceWithMakeMove = chessBoardServiceImp.getPiece(start).get();
                 Piece pieceOnField = chessBoardServiceImp.getPiece(field).get();
-                if (pieceWithMakeMove.getColor() == pieceOnField.getColor() || start.charAt(0) == end.charAt(0)){
+                if (pieceWithMakeMove.getColor() == pieceOnField.getColor() || start.charAt(0) == end.charAt(0)) {
                     result = false;
                 }
             }
@@ -75,7 +72,7 @@ public abstract class PawnAbstract implements Piece {
 
     private List<String> getFieldsBetween(String startField, String endField) {
         Piece piece = chessBoardServiceImp.getPiece(startField).get();
-        if(startField.charAt(0) != endField.charAt(0)) {
+        if (startField.charAt(0) != endField.charAt(0)) {
             return List.of(endField);
         }
 
@@ -87,8 +84,7 @@ public abstract class PawnAbstract implements Piece {
             for (int i = startRow + 1; i <= endRow; i++) {
                 fieldsToValidate.add(startField.charAt(0) + String.valueOf(i));
             }
-        }
-        else {
+        } else {
             for (int i = startRow - 1; i >= endRow; i--) {
                 fieldsToValidate.add(startField.charAt(0) + String.valueOf(i));
             }

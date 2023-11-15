@@ -36,7 +36,7 @@ public class ChessBoardServiceImp implements ChessBoardService {
     @Override
     public void movePiece(String pawnLocation, String expectPawnLocation) {
         Piece piece = getPiece(pawnLocation)
-                .orElseThrow(() -> new PawnException(PawnExceptionMessage.PAWN_NOT_FOUND));
+                .orElseThrow(() -> new PawnException(PawnExceptionMessage.PIECE_NOT_FOUND));
         if (isEnemyOnExpectLocation(piece.getColor(),expectPawnLocation)){
             removePiece(expectPawnLocation);
         }
@@ -142,7 +142,7 @@ public class ChessBoardServiceImp implements ChessBoardService {
             case 'F' -> letter = '5';
             case 'G' -> letter = '6';
             case 'H' -> letter = '7';
-            default -> throw new PawnException(PawnExceptionMessage.PAWN_LOCATION_NOT_FOUND);
+            default -> throw new PawnException(PawnExceptionMessage.PIECE_LOCATION_NOT_FOUND);
         }
         return letter - '0';
     }
@@ -156,7 +156,7 @@ public class ChessBoardServiceImp implements ChessBoardService {
             case 3 -> num = 5;
             case 2 -> num = 6;
             case 1 -> num = 7;
-            default -> throw new PawnException(PawnExceptionMessage.PAWN_LOCATION_NOT_FOUND);
+            default -> throw new PawnException(PawnExceptionMessage.PIECE_LOCATION_NOT_FOUND);
         }
         return num;
     }
