@@ -6,6 +6,7 @@ import org.example.pieces.Piece;
 import org.example.exception.PawnException;
 import org.example.exception.PawnExceptionMessage;
 import org.example.model.Color;
+import org.example.pieces.PieceValidator;
 import org.example.service.BoardService.ChessBoardService;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class Rook implements Piece {
 
     @Override
     public boolean isMoveValid(String start, String end) {
-        if ((validLetter(start.charAt(0), end.charAt(0)) || validNumber(start.charAt(1) - '0', end.charAt(1) - '0')) && isFieldsOccupied(start, end)) {
+        if ((validLetter(start.charAt(0), end.charAt(0)) || validNumber(start.charAt(1) - '0', end.charAt(1) - '0') || !isFieldsOccupied(start,end))) {
             return true;
         }
         return false;
@@ -42,16 +43,7 @@ public class Rook implements Piece {
     private boolean isFieldsOccupied(String start, String end) {
         for (String field : getFieldsBetween(start, end)) {
             if (end.equals(field)) {
-                if (chessBoardService.isFieldOccupied(field)) {
-                    Piece piece = chessBoardService.getPiece(field).get();
-                    Piece pieceFromStartLocation = chessBoardService.getPiece(start).get();
-                    if (piece.getColor() != pieceFromStartLocation.getColor()) {
-                        return true;
-                    } else {
-                        throw new PawnException(PawnExceptionMessage.INVALID_OPERATION);
-                    }
-                }
-                return true;
+               return PieceValidator.isTeamMatePieceAtLocation(start,end,chessBoardService);
             }
             if (chessBoardService.isFieldOccupied(field)) {
                 throw new PawnException(PawnExceptionMessage.INVALID_MOVE);

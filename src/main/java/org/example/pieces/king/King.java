@@ -6,6 +6,7 @@ import org.example.exception.PawnException;
 import org.example.exception.PawnExceptionMessage;
 import org.example.model.Color;
 import org.example.pieces.Piece;
+import org.example.pieces.PieceValidator;
 import org.example.service.BoardService.ChessBoardService;
 
 @AllArgsConstructor
@@ -18,7 +19,7 @@ public class King implements Piece {
 
     @Override
     public void Move(String start, String end) {
-        if (!isMoveValid(start, end) || isFliedOccupied(start,end)) {
+        if (!isMoveValid(start, end)){
             throw new PawnException(PawnExceptionMessage.INVALID_MOVE);
         } else
             chessBoardService.updatePosition(start, end);
@@ -28,23 +29,19 @@ public class King implements Piece {
 
     @Override
     public boolean isMoveValid(String start, String end) {
+
+        return checkCoordinate(start,end) || !isFliedOccupied(start,end);
+    }
+    private boolean checkCoordinate(String start,String end){
         if (validNumber(start.charAt(1) - '0', end.charAt(1) - '0')) {
             return validSecondCoordinate(start.charAt(0), end.charAt(0));
         } else if (validLetter(start.charAt(0), end.charAt(0))) {
             return validSecondCoordinate(start.charAt(1), end.charAt(1));
         } else return validCrossMove(start, end);
     }
-    private boolean isFliedOccupied(String start,String field){
-        if (chessBoardService.isFieldOccupied(field)) {
-            Piece piece = chessBoardService.getPiece(field).get();
-            Piece pieceFromStartLocation = chessBoardService.getPiece(start).get();
-            if (piece.getColor() != pieceFromStartLocation.getColor()) {
-                return false;
-            } else {
-                throw new PawnException(PawnExceptionMessage.INVALID_OPERATION);
-            }
-        }
-        return false;
+
+    private boolean isFliedOccupied(String start, String field) {
+        return PieceValidator.isTeamMatePieceAtLocation(start, field, chessBoardService);
     }
 
     public boolean validCrossMove(String start, String end) {

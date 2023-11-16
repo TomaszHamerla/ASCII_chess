@@ -6,6 +6,7 @@ import org.example.exception.PawnException;
 import org.example.exception.PawnExceptionMessage;
 import org.example.model.ChessBoard;
 import org.example.model.Color;
+import org.example.pieces.PieceValidator;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +38,7 @@ public class ChessBoardServiceImp implements ChessBoardService {
     public void movePiece(String pawnLocation, String expectPawnLocation) {
         Piece piece = getPiece(pawnLocation)
                 .orElseThrow(() -> new PawnException(PawnExceptionMessage.PIECE_NOT_FOUND));
+        PieceValidator.isMoveAllowed(pawnLocation,expectPawnLocation,this);
         if (isEnemyOnExpectLocation(piece.getColor(),expectPawnLocation)){
             removePiece(expectPawnLocation);
         }
