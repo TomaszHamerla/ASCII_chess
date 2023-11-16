@@ -43,6 +43,10 @@ public abstract class PawnAbstract implements Piece {
             ItsFirstMove = false;
         }
     }
+    @Override
+    public boolean isMoveValid(String start, String end) {
+        return (isValidLetter(start, end) && isValidNumber(start, end)) && !isFieldsOccupied(start, end);
+    }
 
     private boolean isValidLetter(String start, String end) {
         return start.charAt(0) == end.charAt(0) || start.charAt(0) == end.charAt(0) + 1 || start.charAt(0) == end.charAt(0) - 1;
@@ -56,14 +60,14 @@ public abstract class PawnAbstract implements Piece {
         }
     }
 
-    private boolean areFieldsOccupied(String start, String end) {
-        boolean result = true;
+    private boolean isFieldsOccupied(String start, String end) {
+        boolean result = false;
         for (String field : getFieldsBetween(start, end)) {
             if (chessBoardServiceImp.isFieldOccupied(field)) {
                 Piece pieceWithMakeMove = chessBoardServiceImp.getPiece(start).get();
                 Piece pieceOnField = chessBoardServiceImp.getPiece(field).get();
                 if (pieceWithMakeMove.getColor() == pieceOnField.getColor() || start.charAt(0) == end.charAt(0)) {
-                    result = false;
+                    result = true;
                 }
             }
         }
@@ -92,8 +96,5 @@ public abstract class PawnAbstract implements Piece {
         return fieldsToValidate;
     }
 
-    @Override
-    public boolean isMoveValid(String start, String end) {
-        return isValidLetter(start, end) && isValidNumber(start, end) && areFieldsOccupied(start, end);
-    }
+
 }

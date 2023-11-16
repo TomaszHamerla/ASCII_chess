@@ -33,7 +33,7 @@ public class Rook implements Piece {
 
     @Override
     public boolean isMoveValid(String start, String end) {
-        if ((validLetter(start.charAt(0), end.charAt(0)) || validNumber(start.charAt(1) - '0', end.charAt(1) - '0') || !isFieldsOccupied(start,end))) {
+        if ((validLetter(start.charAt(0), end.charAt(0)) || validNumber(start.charAt(1) - '0', end.charAt(1) - '0')) && !isFieldsOccupied(start, end)) {
             return true;
         }
         return false;
@@ -43,10 +43,10 @@ public class Rook implements Piece {
     private boolean isFieldsOccupied(String start, String end) {
         for (String field : getFieldsBetween(start, end)) {
             if (end.equals(field)) {
-               return PieceValidator.isTeamMatePieceAtLocation(start,end,chessBoardService);
+                return PieceValidator.isTeamMatePieceAtLocation(start, end, chessBoardService);
             }
             if (chessBoardService.isFieldOccupied(field)) {
-                throw new PawnException(PawnExceptionMessage.INVALID_MOVE);
+                return true;
             }
 
         }
