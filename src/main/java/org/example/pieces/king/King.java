@@ -29,9 +29,17 @@ public class King implements Piece {
     public void Move(String start, String end) {
         if (!isMoveValid(start, end)) {
             throw new PieceException(PieceExceptionMessage.INVALID_MOVE);
-        } else
-            isFirstMove=true;
-            chessBoardService.updatePosition(start, end);
+        }
+        isFirstMove=true;
+        chessBoardService.updatePosition(start, end);
+        coordinateLetter = end.charAt(0);
+        coordinateNumber = end.charAt(1) - '0';
+    }
+
+
+    public void MoveAfterCastle(String start, String end) {
+        isFirstMove=true;
+        chessBoardService.updatePosition(start, end);
         coordinateLetter = end.charAt(0);
         coordinateNumber = end.charAt(1) - '0';
     }
@@ -50,7 +58,7 @@ public class King implements Piece {
         } else return validCrossMove(start, end);
     }
 
-   private boolean isFieldsOccupied(String start, String field) {
+    private boolean isFieldsOccupied(String start, String field) {
         return UtilsOperation.isTeamMatePieceAtLocation(start, field, chessBoardService);
     }
 

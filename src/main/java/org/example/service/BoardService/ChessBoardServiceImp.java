@@ -46,12 +46,15 @@ public class ChessBoardServiceImp implements ChessBoardService {
                 .orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
         if (!UtilsOperation.isCheckmateResolved(pawnLocation, expectPawnLocation, this)) {
             throw new PieceException(PieceExceptionMessage.CHESS_CHECK_EXCEPTION);
-        }
-        if (isCastlingValid(pawnLocation,expectPawnLocation)){
-            Piece king = getPiece(pawnLocation).get();
-            Piece rook = getPiece(expectPawnLocation).get();
+        }//TODO
+        if (isCastlingValid(pawnLocation, expectPawnLocation)) {
+            if (expectPawnLocation.charAt(0)=='H'){
+                King king =(King) getPiece(pawnLocation).get();
+                Rook rook = (Rook) getPiece(expectPawnLocation).get();
 
-        }else {
+
+            }
+        } else {
             UtilsOperation.isMoveAllowed(pawnLocation, expectPawnLocation, this);
             if (isEnemyOnExpectLocation(piece.getColor(), expectPawnLocation)) {
                 removePiece(expectPawnLocation);
@@ -141,14 +144,21 @@ public class ChessBoardServiceImp implements ChessBoardService {
             if (!king.isFirstMove()) {
                 if (rookLocation.equals("A1")) {
                     Rook rook = (Rook) getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
-                    UtilsOperation.isMoveAllowed(kingLocation, "D1", this);
-                    UtilsOperation.isMoveAllowed(kingLocation, "C1", this);
-                    return true;
+                    if (!rook.isFirstMove()) {
+                        UtilsOperation.isMoveAllowed(kingLocation, "D1", this);
+                        UtilsOperation.isMoveAllowed(kingLocation, "C1", this);
+                        UtilsOperation.isMoveAllowed(kingLocation, "B1", this);
+                        return true;
+                    }
+                    return false;
                 } else if (rookLocation.equals("H1")) {
                     Rook rook = (Rook) getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
-                    UtilsOperation.isMoveAllowed(kingLocation, "F1", this);
-                    UtilsOperation.isMoveAllowed(kingLocation, "G1", this);
-                    return true;
+                    if (!rook.isFirstMove()) {
+                        UtilsOperation.isMoveAllowed(kingLocation, "F1", this);
+                        UtilsOperation.isMoveAllowed(kingLocation, "G1", this);
+                        return true;
+                    }
+                    return false;
                 }
             }
         }
@@ -157,14 +167,20 @@ public class ChessBoardServiceImp implements ChessBoardService {
             if (!king.isFirstMove()) {
                 if (rookLocation.equals("A8")) {
                     Rook rook = (Rook) getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
-                    UtilsOperation.isMoveAllowed(kingLocation, "D8", this);
-                    UtilsOperation.isMoveAllowed(kingLocation, "C8", this);
-                    return true;
+                    if (!rook.isFirstMove()) {
+                        UtilsOperation.isMoveAllowed(kingLocation, "D8", this);
+                        UtilsOperation.isMoveAllowed(kingLocation, "C8", this);
+                        UtilsOperation.isMoveAllowed(kingLocation, "B8", this);
+                        return true;
+                    }
+                    return false;
                 } else if (rookLocation.equals("H8")) {
                     Rook rook = (Rook) getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
-                    UtilsOperation.isMoveAllowed(kingLocation, "F8", this);
-                    UtilsOperation.isMoveAllowed(kingLocation, "G8", this);
-                    return true;
+                    if (!rook.isFirstMove()){
+                        UtilsOperation.isMoveAllowed(kingLocation, "F8", this);
+                        UtilsOperation.isMoveAllowed(kingLocation, "G8", this);
+                        return true;
+                    }return false;
                 }
             }
         }
