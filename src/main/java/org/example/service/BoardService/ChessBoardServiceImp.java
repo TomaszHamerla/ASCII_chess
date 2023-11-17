@@ -2,8 +2,8 @@ package org.example.service.BoardService;
 
 import lombok.RequiredArgsConstructor;
 import org.example.pieces.Piece;
-import org.example.exception.PawnException;
-import org.example.exception.PawnExceptionMessage;
+import org.example.exception.PieceException;
+import org.example.exception.PieceExceptionMessage;
 import org.example.model.ChessBoard;
 import org.example.model.Color;
 import org.example.pieces.PieceValidator;
@@ -37,7 +37,10 @@ public class ChessBoardServiceImp implements ChessBoardService {
     @Override
     public void movePiece(String pawnLocation, String expectPawnLocation) {
         Piece piece = getPiece(pawnLocation)
-                .orElseThrow(() -> new PawnException(PawnExceptionMessage.PIECE_NOT_FOUND));
+                .orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
+        if (!PieceValidator.isCheckmateResolved(pawnLocation,expectPawnLocation,this)){
+            throw new PieceException(PieceExceptionMessage.CHESS_CHECK_EXCEPTION);
+        }
         PieceValidator.isMoveAllowed(pawnLocation,expectPawnLocation,this);
         if (isEnemyOnExpectLocation(piece.getColor(),expectPawnLocation)){
             removePiece(expectPawnLocation);
@@ -144,7 +147,7 @@ public class ChessBoardServiceImp implements ChessBoardService {
             case 'F' -> letter = '5';
             case 'G' -> letter = '6';
             case 'H' -> letter = '7';
-            default -> throw new PawnException(PawnExceptionMessage.PIECE_LOCATION_NOT_FOUND);
+            default -> throw new PieceException(PieceExceptionMessage.PIECE_LOCATION_NOT_FOUND);
         }
         return letter - '0';
     }
@@ -158,7 +161,7 @@ public class ChessBoardServiceImp implements ChessBoardService {
             case 3 -> num = 5;
             case 2 -> num = 6;
             case 1 -> num = 7;
-            default -> throw new PawnException(PawnExceptionMessage.PIECE_LOCATION_NOT_FOUND);
+            default -> throw new PieceException(PieceExceptionMessage.PIECE_LOCATION_NOT_FOUND);
         }
         return num;
     }

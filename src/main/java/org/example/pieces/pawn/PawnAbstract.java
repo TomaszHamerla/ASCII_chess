@@ -2,8 +2,8 @@ package org.example.pieces.pawn;
 
 import lombok.Data;
 import org.example.pieces.Piece;
-import org.example.exception.PawnException;
-import org.example.exception.PawnExceptionMessage;
+import org.example.exception.PieceException;
+import org.example.exception.PieceExceptionMessage;
 import org.example.model.Color;
 import org.example.service.BoardService.ChessBoardService;
 
@@ -35,7 +35,7 @@ public abstract class PawnAbstract implements Piece {
     @Override
     public void Move(String start, String end) {
         if (!isMoveValid(start, end)) {
-            throw new PawnException(PawnExceptionMessage.INVALID_MOVE);
+            throw new PieceException(PieceExceptionMessage.INVALID_MOVE);
         } else {
             chessBoardServiceImp.updatePosition(start, end);
             CoordinateLetter = end.charAt(0);

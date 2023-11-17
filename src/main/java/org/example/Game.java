@@ -3,9 +3,12 @@ package org.example;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.example.model.ChessBoard;
+import org.example.pieces.PieceValidator;
 import org.example.service.BoardService.ChessBoardService;
 
 import java.util.Scanner;
+
+import static org.example.pieces.PieceValidator.*;
 
 @RequiredArgsConstructor
 @Data
@@ -22,6 +25,9 @@ public class Game {
            try {
                printTurn();
                Scanner src = new Scanner(System.in);
+               if (isKingUnderAttack(chessBoard.isWhiteTurn(),chessBoardService)){
+                   System.out.println("King is in check !");
+               }
                System.out.print("Enter pawn location: ");
                String pawnLocation= src.nextLine();
               // chessBoardService.validPawnLocation(pawnLocation.toUpperCase());

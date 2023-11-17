@@ -3,8 +3,8 @@ package org.example.pieces.rook;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.example.pieces.Piece;
-import org.example.exception.PawnException;
-import org.example.exception.PawnExceptionMessage;
+import org.example.exception.PieceException;
+import org.example.exception.PieceExceptionMessage;
 import org.example.model.Color;
 import org.example.pieces.PieceValidator;
 import org.example.service.BoardService.ChessBoardService;
@@ -23,7 +23,7 @@ public class Rook implements Piece {
     @Override
     public void Move(String start, String end) {
         if (!isMoveValid(start, end)) {
-            throw new PawnException(PawnExceptionMessage.INVALID_MOVE);
+            throw new PieceException(PieceExceptionMessage.INVALID_MOVE);
         } else
             chessBoardService.updatePosition(start, end);
         coordinateLetter = end.charAt(0);
