@@ -3,12 +3,11 @@ package org.example;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.example.model.ChessBoard;
-import org.example.pieces.PieceValidator;
 import org.example.service.BoardService.ChessBoardService;
 
 import java.util.Scanner;
 
-import static org.example.pieces.PieceValidator.*;
+import static org.example.pieces.UtilsOperation.*;
 
 @RequiredArgsConstructor
 @Data
@@ -26,6 +25,13 @@ public class Game {
                printTurn();
                Scanner src = new Scanner(System.in);
                if (isKingUnderAttack(chessBoard.isWhiteTurn(),chessBoardService)){
+                   //TODO
+                   if (isCheckmateSituation(chessBoard.isWhiteTurn(),chessBoardService)){
+                       System.out.println("Game Over !");
+                       printWinner();
+                       gameOver = false;
+                       break;
+                   }
                    System.out.println("King is in check !");
                }
                System.out.print("Enter pawn location: ");
@@ -52,5 +58,11 @@ public class Game {
             System.out.println("Its whites turn");
         }else
             System.out.println("Its blacks turn");
+    }
+    private void printWinner(){
+        if (chessBoard.isWhiteTurn()){
+            System.out.println("Whites");
+        }else
+            System.out.println("Blacks");
     }
 }

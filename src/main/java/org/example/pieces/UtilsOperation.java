@@ -8,7 +8,7 @@ import org.example.service.BoardService.ChessBoardService;
 
 import java.util.Optional;
 
-public class PieceValidator {
+public class UtilsOperation {
     public static boolean isTeamMatePieceAtLocation(String start, String end, ChessBoardService chessBoardService) {
         if (chessBoardService.isFieldOccupied(end)) {
             Piece piece = chessBoardService.getPiece(end).get();
@@ -55,11 +55,14 @@ public class PieceValidator {
             return true;
         }
     }
-    public static boolean isCheckmateSituation(boolean whiteTurn,ChessBoardService chessBoardService){
+
+    //TODO
+    public static boolean isCheckmateSituation(boolean whiteTurn, ChessBoardService chessBoardService) {
+
         return false;
     }
-
-    private static Optional<Piece> getPieceWhoCanCheck(ChessBoardService chessBoardService, Color color, String kingPosition) {
+    private static Optional<Piece> getPieceWhoCanCheck(ChessBoardService chessBoardService, Color color, String
+            kingPosition) {
         Optional<Piece> canCheck = chessBoardService.getPieces().stream()
                 .filter(p -> (p.getColor() != color)
                         && (p.isMoveValid(getPPosition(p), kingPosition)))

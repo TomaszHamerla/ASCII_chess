@@ -6,26 +6,35 @@ import org.example.pieces.Piece;
 import org.example.exception.PieceException;
 import org.example.exception.PieceExceptionMessage;
 import org.example.model.Color;
-import org.example.pieces.PieceValidator;
+
+import org.example.pieces.UtilsOperation;
 import org.example.service.BoardService.ChessBoardService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 public class Rook implements Piece {
     private final ChessBoardService chessBoardService;
     private Color color;
     private char coordinateLetter;
     private int coordinateNumber;
+    private boolean isFirstMove = false;
+
+    public Rook(ChessBoardService chessBoardService, Color color, char coordinateLetter, int coordinateNumber) {
+        this.chessBoardService = chessBoardService;
+        this.color = color;
+        this.coordinateLetter = coordinateLetter;
+        this.coordinateNumber = coordinateNumber;
+    }
 
     @Override
     public void Move(String start, String end) {
         if (!isMoveValid(start, end)) {
             throw new PieceException(PieceExceptionMessage.INVALID_MOVE);
         } else
-            chessBoardService.updatePosition(start, end);
+            isFirstMove = true;
+        chessBoardService.updatePosition(start, end);
         coordinateLetter = end.charAt(0);
         coordinateNumber = end.charAt(1) - '0';
 
@@ -43,7 +52,7 @@ public class Rook implements Piece {
     private boolean isFieldsOccupied(String start, String end) {
         for (String field : getFieldsBetween(start, end)) {
             if (end.equals(field)) {
-                return PieceValidator.isTeamMatePieceAtLocation(start, end, chessBoardService);
+                return UtilsOperation.isTeamMatePieceAtLocation(start, end, chessBoardService);
             }
             if (chessBoardService.isFieldOccupied(field)) {
                 return true;

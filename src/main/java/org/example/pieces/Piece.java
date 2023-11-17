@@ -10,5 +10,6 @@ public interface Piece {
      boolean isMoveValid (String start, String end);
      void setCoordinateLetter(char letter);
      void setCoordinateNumber(int number);
+     }
 
 }

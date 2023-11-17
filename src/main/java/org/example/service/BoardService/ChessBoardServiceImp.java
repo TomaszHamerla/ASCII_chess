@@ -6,7 +6,9 @@ import org.example.exception.PieceException;
 import org.example.exception.PieceExceptionMessage;
 import org.example.model.ChessBoard;
 import org.example.model.Color;
-import org.example.pieces.PieceValidator;
+import org.example.pieces.UtilsOperation;
+import org.example.pieces.king.King;
+import org.example.pieces.rook.Rook;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +17,9 @@ import java.util.Optional;
 
 public class ChessBoardServiceImp implements ChessBoardService {
     private final ChessBoard chessBoard;
+    private boolean castleWhite = false;
+    private boolean castleBlack = false;
+
     @Override
     public void printChessBoard(char[][] chessBoard) {
         int a = 8;
@@ -34,19 +39,27 @@ public class ChessBoardServiceImp implements ChessBoardService {
         }
         System.out.println();
     }
+
     @Override
     public void movePiece(String pawnLocation, String expectPawnLocation) {
         Piece piece = getPiece(pawnLocation)
                 .orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
-        if (!PieceValidator.isCheckmateResolved(pawnLocation,expectPawnLocation,this)){
+        if (!UtilsOperation.isCheckmateResolved(pawnLocation, expectPawnLocation, this)) {
             throw new PieceException(PieceExceptionMessage.CHESS_CHECK_EXCEPTION);
         }
-        PieceValidator.isMoveAllowed(pawnLocation,expectPawnLocation,this);
-        if (isEnemyOnExpectLocation(piece.getColor(),expectPawnLocation)){
-            removePiece(expectPawnLocation);
+        if (isCastlingValid(pawnLocation,expectPawnLocation)){
+            Piece king = getPiece(pawnLocation).get();
+            Piece rook = getPiece(expectPawnLocation).get();
+
+        }else {
+            UtilsOperation.isMoveAllowed(pawnLocation, expectPawnLocation, this);
+            if (isEnemyOnExpectLocation(piece.getColor(), expectPawnLocation)) {
+                removePiece(expectPawnLocation);
+            }
+            piece.Move(pawnLocation, expectPawnLocation);
         }
-        piece.Move(pawnLocation, expectPawnLocation);
     }
+
     @Override
     public void updatePosition(String pawnLocation, String expectPawnLocation) {
         char figure = getFigure(pawnLocation);
@@ -55,6 +68,7 @@ public class ChessBoardServiceImp implements ChessBoardService {
         int expectIndexNumber = getIndexNumber(expectPawnLocation.charAt(1) - '0');
         chessBoard.getChessBoard()[expectIndexNumber][expectIndexLetter] = figure;
     }
+
     @Override
     public boolean isFieldOccupied(String pawnLocation) {
         return chessBoard.getPieces()
@@ -121,22 +135,61 @@ public class ChessBoardServiceImp implements ChessBoardService {
 //        }
 //
 //    }
+    private boolean isCastlingValid(String kingLocation, String rookLocation) {
+        if (kingLocation.equals("E1")) {
+            King king = (King) getPiece(kingLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
+            if (!king.isFirstMove()) {
+                if (rookLocation.equals("A1")) {
+                    Rook rook = (Rook) getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
+                    UtilsOperation.isMoveAllowed(kingLocation, "D1", this);
+                    UtilsOperation.isMoveAllowed(kingLocation, "C1", this);
+                    return true;
+                } else if (rookLocation.equals("H1")) {
+                    Rook rook = (Rook) getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
+                    UtilsOperation.isMoveAllowed(kingLocation, "F1", this);
+                    UtilsOperation.isMoveAllowed(kingLocation, "G1", this);
+                    return true;
+                }
+            }
+        }
+        if (kingLocation.equals("E8")) {
+            King king = (King) getPiece(kingLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
+            if (!king.isFirstMove()) {
+                if (rookLocation.equals("A8")) {
+                    Rook rook = (Rook) getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
+                    UtilsOperation.isMoveAllowed(kingLocation, "D8", this);
+                    UtilsOperation.isMoveAllowed(kingLocation, "C8", this);
+                    return true;
+                } else if (rookLocation.equals("H8")) {
+                    Rook rook = (Rook) getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
+                    UtilsOperation.isMoveAllowed(kingLocation, "F8", this);
+                    UtilsOperation.isMoveAllowed(kingLocation, "G8", this);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private void removePiece(String expectPawnLocation) {
         Piece enemy = getPiece(expectPawnLocation).get();
         chessBoard.getPieces().remove(enemy);
     }
+
     private boolean isEnemyOnExpectLocation(Color color, String expectPawnLocation) {
         Optional<Piece> piece = getPiece(expectPawnLocation);
-        if (piece.isPresent()){
+        if (piece.isPresent()) {
             return color != piece.get().getColor();
         }
         return false;
     }
+
     private char getFigure(String pawnLocation) {
         int indexLetter = getIndexLetter(pawnLocation.charAt(0));
         int indexNumber = getIndexNumber(pawnLocation.charAt(1) - '0');
         return chessBoard.getChessBoard()[indexNumber][indexLetter];
     }
+
     private int getIndexLetter(char letter) {
         switch (letter) {
             case 'A' -> letter = '0';
@@ -151,6 +204,7 @@ public class ChessBoardServiceImp implements ChessBoardService {
         }
         return letter - '0';
     }
+
     private int getIndexNumber(int num) {
         switch (num) {
             case 8 -> num = 0;
@@ -165,6 +219,7 @@ public class ChessBoardServiceImp implements ChessBoardService {
         }
         return num;
     }
+
     private void removePawn(String pawnLocation) {
         int indexLetter = getIndexLetter(pawnLocation.charAt(0));
         int indexNumber = getIndexNumber(pawnLocation.charAt(1) - '0');

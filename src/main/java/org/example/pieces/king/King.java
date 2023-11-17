@@ -6,22 +6,31 @@ import org.example.exception.PieceException;
 import org.example.exception.PieceExceptionMessage;
 import org.example.model.Color;
 import org.example.pieces.Piece;
-import org.example.pieces.PieceValidator;
+import org.example.pieces.UtilsOperation;
 import org.example.service.BoardService.ChessBoardService;
 
-@AllArgsConstructor
+
 @Data
 public class King implements Piece {
     private final ChessBoardService chessBoardService;
     private Color color;
     private char coordinateLetter;
     private int coordinateNumber;
+    private boolean isFirstMove = false;
+
+    public King(ChessBoardService chessBoardService, Color color, char coordinateLetter, int coordinateNumber) {
+        this.chessBoardService = chessBoardService;
+        this.color = color;
+        this.coordinateLetter = coordinateLetter;
+        this.coordinateNumber = coordinateNumber;
+    }
 
     @Override
     public void Move(String start, String end) {
         if (!isMoveValid(start, end)) {
             throw new PieceException(PieceExceptionMessage.INVALID_MOVE);
         } else
+            isFirstMove=true;
             chessBoardService.updatePosition(start, end);
         coordinateLetter = end.charAt(0);
         coordinateNumber = end.charAt(1) - '0';
@@ -42,7 +51,7 @@ public class King implements Piece {
     }
 
    private boolean isFieldsOccupied(String start, String field) {
-        return PieceValidator.isTeamMatePieceAtLocation(start, field, chessBoardService);
+        return UtilsOperation.isTeamMatePieceAtLocation(start, field, chessBoardService);
     }
 
     public boolean validCrossMove(String start, String end) {
