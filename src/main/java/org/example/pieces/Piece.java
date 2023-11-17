@@ -12,4 +12,4 @@ public interface Piece {
      void setCoordinateNumber(int number);
      }
 
-}
+
