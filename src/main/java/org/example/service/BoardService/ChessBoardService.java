@@ -17,4 +17,6 @@ public interface ChessBoardService {
   //  void validExpectPawnLocation(String expectPawnLocation);
     List<Piece> getPieces();
     Optional<Piece> getPiece(String pawnLocation);
+    void saveMove(String start, String end);
+    List<String> getSavedMoves();
 }
