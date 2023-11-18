@@ -1,12 +1,12 @@
 package org.example.pieces.king;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.example.exception.PieceException;
 import org.example.exception.PieceExceptionMessage;
 import org.example.model.Color;
 import org.example.pieces.Piece;
 import org.example.pieces.UtilsOperation;
+import org.example.pieces.rook.Rook;
 import org.example.service.BoardService.ChessBoardService;
 
 
@@ -27,27 +27,95 @@ public class King implements Piece {
 
     @Override
     public void Move(String start, String end) {
-        if (!isMoveValid(start, end)) {
+        if (isCastlingValid(start, end)) {
+            moveAfterCastle(start,end);
+        } else if (!isMoveValid(start, end)) {
             throw new PieceException(PieceExceptionMessage.INVALID_MOVE);
+        } else {
+            move(start,end);
         }
-        isFirstMove=true;
-        chessBoardService.updatePosition(start, end);
-        coordinateLetter = end.charAt(0);
-        coordinateNumber = end.charAt(1) - '0';
     }
 
-
-    public void MoveAfterCastle(String start, String end) {
-        isFirstMove=true;
-        chessBoardService.updatePosition(start, end);
-        coordinateLetter = end.charAt(0);
-        coordinateNumber = end.charAt(1) - '0';
-    }
 
     @Override
     public boolean isMoveValid(String start, String end) {
 
         return checkCoordinate(start, end) && !isFieldsOccupied(start, end);
+    }
+    private void move(String start, String end){
+        isFirstMove = true;
+        chessBoardService.updatePositionArr(start, end);
+        coordinateLetter = end.charAt(0);
+        coordinateNumber = end.charAt(1) - '0';
+    }
+
+    private void moveAfterCastle(String pawnLocation,String expectPawnLocation) {
+        if (expectPawnLocation.charAt(0)=='H'){
+            King king =(King) chessBoardService.getPiece(pawnLocation).get();
+            Rook rook = (Rook) chessBoardService.getPiece(expectPawnLocation).get();
+            String kingLocation="G" + expectPawnLocation.charAt(1);
+            king.move(pawnLocation,kingLocation);
+            String rookLocation ="F"+expectPawnLocation.charAt(1);
+            rook.moveAfterCastle(expectPawnLocation,rookLocation);
+        }else {
+            King king =(King) chessBoardService.getPiece(pawnLocation).get();
+            Rook rook = (Rook) chessBoardService.getPiece(expectPawnLocation).get();
+            String kingLocation="C" + expectPawnLocation.charAt(1);
+            king.move(pawnLocation,kingLocation);
+            String rookLocation ="D"+expectPawnLocation.charAt(1);
+            rook.moveAfterCastle(expectPawnLocation,rookLocation);
+        }
+
+    }
+
+    public boolean isCastlingValid(String kingLocation, String rookLocation) {
+        if (kingLocation.equals("E1")) {
+            King king = (King) chessBoardService.getPiece(kingLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
+            if (!king.isFirstMove()) {
+                if (rookLocation.equals("A1")) {
+                    Rook rook = (Rook) chessBoardService.getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
+                    if (!rook.isFirstMove()) {
+                        UtilsOperation.isMoveAllowed(kingLocation, "D1", chessBoardService);
+                        UtilsOperation.isMoveAllowed(kingLocation, "C1", chessBoardService);
+                        UtilsOperation.isMoveAllowed(kingLocation, "B1", chessBoardService);
+                        return true;
+                    }
+                    return false;
+                } else if (rookLocation.equals("H1")) {
+                    Rook rook = (Rook) chessBoardService.getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
+                    if (!rook.isFirstMove()) {
+                        UtilsOperation.isMoveAllowed(kingLocation, "F1", chessBoardService);
+                        UtilsOperation.isMoveAllowed(kingLocation, "G1", chessBoardService);
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        }
+        if (kingLocation.equals("E8")) {
+            King king = (King) chessBoardService.getPiece(kingLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
+            if (!king.isFirstMove()) {
+                if (rookLocation.equals("A8")) {
+                    Rook rook = (Rook) chessBoardService.getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
+                    if (!rook.isFirstMove()) {
+                        UtilsOperation.isMoveAllowed(kingLocation, "D8", chessBoardService);
+                        UtilsOperation.isMoveAllowed(kingLocation, "C8", chessBoardService);
+                        UtilsOperation.isMoveAllowed(kingLocation, "B8", chessBoardService);
+                        return true;
+                    }
+                    return false;
+                } else if (rookLocation.equals("H8")) {
+                    Rook rook = (Rook) chessBoardService.getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
+                    if (!rook.isFirstMove()) {
+                        UtilsOperation.isMoveAllowed(kingLocation, "F8", chessBoardService);
+                        UtilsOperation.isMoveAllowed(kingLocation, "G8", chessBoardService);
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 
     private boolean checkCoordinate(String start, String end) {

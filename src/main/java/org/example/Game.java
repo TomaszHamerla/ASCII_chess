@@ -18,7 +18,7 @@ public class Game {
 
     public void run() {
 
-        chessBoardService.printChessBoard(chessBoard.getChessBoard());
+        chessBoardService.printChessBoardArr(chessBoard.getChessBoard());
        do {
 
            try {
@@ -44,7 +44,7 @@ public class Game {
 
                chessBoardService.movePiece(pawnLocation.toUpperCase(),expectPawnLocation.toUpperCase());
 
-               chessBoardService.printChessBoard(chessBoard.getChessBoard());
+               chessBoardService.printChessBoardArr(chessBoard.getChessBoard());
 
                chessBoard.setWhiteTurn(!chessBoard.isWhiteTurn());
            }catch (Exception e){

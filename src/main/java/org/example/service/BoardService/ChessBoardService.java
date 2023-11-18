@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ChessBoardService {
-    void printChessBoard(char[][] chessBoard);
-    void updatePosition(String pawnLocation, String expectPawnLocation);
+    void printChessBoardArr(char[][] chessBoard);
+    void updatePositionArr(String pawnLocation, String expectPawnLocation);
 
     boolean isFieldOccupied(String pawnLocation);
     void movePiece(String pawnLocation, String expectPawnLocation);

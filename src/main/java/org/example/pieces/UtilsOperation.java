@@ -61,13 +61,25 @@ public class UtilsOperation {
 
         return false;
     }
-    private static Optional<Piece> getPieceWhoCanCheck(ChessBoardService chessBoardService, Color color, String
-            kingPosition) {
-        Optional<Piece> canCheck = chessBoardService.getPieces().stream()
+
+    public static void removePiece(String expectPawnLocation, ChessBoardService chessBoardService) {
+        Piece enemy = chessBoardService.getPiece(expectPawnLocation).get();
+        chessBoardService.getPieces().remove(enemy);
+    }
+
+    public static boolean isEnemyOnExpectLocation(Color color, String expectPawnLocation, ChessBoardService chessBoardService) {
+        Optional<Piece> piece = chessBoardService.getPiece(expectPawnLocation);
+        if (piece.isPresent()) {
+            return color != piece.get().getColor();
+        }
+        return false;
+    }
+
+    private static Optional<Piece> getPieceWhoCanCheck(ChessBoardService chessBoardService, Color color, String kingPosition) {
+        return chessBoardService.getPieces().stream()
                 .filter(p -> (p.getColor() != color)
                         && (p.isMoveValid(getPPosition(p), kingPosition)))
                 .findFirst();
-        return canCheck;
     }
 
     public static boolean isKingUnderAttack(boolean whiteTurn, ChessBoardService chessBoardService) {
