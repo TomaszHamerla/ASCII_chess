@@ -5,11 +5,7 @@ import org.example.pieces.Piece;
 import org.example.exception.PieceException;
 import org.example.exception.PieceExceptionMessage;
 import org.example.model.ChessBoard;
-import org.example.model.Color;
 import org.example.pieces.UtilsOperation;
-import org.example.pieces.king.King;
-import org.example.pieces.rook.Rook;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -17,11 +13,8 @@ import java.util.Optional;
 
 public class ChessBoardServiceImp implements ChessBoardService {
     private final ChessBoard chessBoard;
-    private boolean castleWhite = false;
-    private boolean castleBlack = false;
-
     @Override
-    public void printChessBoard(char[][] chessBoard) {
+    public void printChessBoardArr(char[][] chessBoard) {
         int a = 8;
         for (int i = 0; i < chessBoard.length; i++) {
             System.out.print(a + "    ");
@@ -46,29 +39,20 @@ public class ChessBoardServiceImp implements ChessBoardService {
                 .orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
         if (!UtilsOperation.isCheckmateResolved(pawnLocation, expectPawnLocation, this)) {
             throw new PieceException(PieceExceptionMessage.CHESS_CHECK_EXCEPTION);
-        }//TODO
-        if (isCastlingValid(pawnLocation, expectPawnLocation)) {
-            if (expectPawnLocation.charAt(0)=='H'){
-                King king =(King) getPiece(pawnLocation).get();
-                Rook rook = (Rook) getPiece(expectPawnLocation).get();
-
-
-            }
-        } else {
-            UtilsOperation.isMoveAllowed(pawnLocation, expectPawnLocation, this);
-            if (isEnemyOnExpectLocation(piece.getColor(), expectPawnLocation)) {
-                removePiece(expectPawnLocation);
-            }
-            piece.Move(pawnLocation, expectPawnLocation);
         }
+        UtilsOperation.isMoveAllowed(pawnLocation, expectPawnLocation, this);
+       if (UtilsOperation.isEnemyOnExpectLocation(piece.getColor(), expectPawnLocation, this)) {
+           UtilsOperation.removePiece(expectPawnLocation, this);
+        }
+        piece.Move(pawnLocation, expectPawnLocation);
     }
 
     @Override
-    public void updatePosition(String pawnLocation, String expectPawnLocation) {
-        char figure = getFigure(pawnLocation);
-        removePawn(pawnLocation); //zamienia pionke na puste pole '-'
-        int expectIndexLetter = getIndexLetter(expectPawnLocation.charAt(0));
-        int expectIndexNumber = getIndexNumber(expectPawnLocation.charAt(1) - '0');
+    public void updatePositionArr(String pawnLocation, String expectPawnLocation) {
+        char figure = getFigureArr(pawnLocation);
+        removePawnArr(pawnLocation); //zamienia pionke na puste pole '-'
+        int expectIndexLetter = getIndexLetterArr(expectPawnLocation.charAt(0));
+        int expectIndexNumber = getIndexNumberArr(expectPawnLocation.charAt(1) - '0');
         chessBoard.getChessBoard()[expectIndexNumber][expectIndexLetter] = figure;
     }
 
@@ -149,75 +133,14 @@ public class ChessBoardServiceImp implements ChessBoardService {
 //        }
 //
 //    }
-    private boolean isCastlingValid(String kingLocation, String rookLocation) {
-        if (kingLocation.equals("E1")) {
-            King king = (King) getPiece(kingLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
-            if (!king.isFirstMove()) {
-                if (rookLocation.equals("A1")) {
-                    Rook rook = (Rook) getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
-                    if (!rook.isFirstMove()) {
-                        UtilsOperation.isMoveAllowed(kingLocation, "D1", this);
-                        UtilsOperation.isMoveAllowed(kingLocation, "C1", this);
-                        UtilsOperation.isMoveAllowed(kingLocation, "B1", this);
-                        return true;
-                    }
-                    return false;
-                } else if (rookLocation.equals("H1")) {
-                    Rook rook = (Rook) getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
-                    if (!rook.isFirstMove()) {
-                        UtilsOperation.isMoveAllowed(kingLocation, "F1", this);
-                        UtilsOperation.isMoveAllowed(kingLocation, "G1", this);
-                        return true;
-                    }
-                    return false;
-                }
-            }
-        }
-        if (kingLocation.equals("E8")) {
-            King king = (King) getPiece(kingLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
-            if (!king.isFirstMove()) {
-                if (rookLocation.equals("A8")) {
-                    Rook rook = (Rook) getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
-                    if (!rook.isFirstMove()) {
-                        UtilsOperation.isMoveAllowed(kingLocation, "D8", this);
-                        UtilsOperation.isMoveAllowed(kingLocation, "C8", this);
-                        UtilsOperation.isMoveAllowed(kingLocation, "B8", this);
-                        return true;
-                    }
-                    return false;
-                } else if (rookLocation.equals("H8")) {
-                    Rook rook = (Rook) getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
-                    if (!rook.isFirstMove()){
-                        UtilsOperation.isMoveAllowed(kingLocation, "F8", this);
-                        UtilsOperation.isMoveAllowed(kingLocation, "G8", this);
-                        return true;
-                    }return false;
-                }
-            }
-        }
-        return false;
-    }
 
-    private void removePiece(String expectPawnLocation) {
-        Piece enemy = getPiece(expectPawnLocation).get();
-        chessBoard.getPieces().remove(enemy);
-    }
-
-    private boolean isEnemyOnExpectLocation(Color color, String expectPawnLocation) {
-        Optional<Piece> piece = getPiece(expectPawnLocation);
-        if (piece.isPresent()) {
-            return color != piece.get().getColor();
-        }
-        return false;
-    }
-
-    private char getFigure(String pawnLocation) {
-        int indexLetter = getIndexLetter(pawnLocation.charAt(0));
-        int indexNumber = getIndexNumber(pawnLocation.charAt(1) - '0');
+    private char getFigureArr(String pawnLocation) {
+        int indexLetter = getIndexLetterArr(pawnLocation.charAt(0));
+        int indexNumber = getIndexNumberArr(pawnLocation.charAt(1) - '0');
         return chessBoard.getChessBoard()[indexNumber][indexLetter];
     }
 
-    private int getIndexLetter(char letter) {
+    private int getIndexLetterArr(char letter) {
         switch (letter) {
             case 'A' -> letter = '0';
             case 'B' -> letter = '1';
@@ -232,7 +155,7 @@ public class ChessBoardServiceImp implements ChessBoardService {
         return letter - '0';
     }
 
-    private int getIndexNumber(int num) {
+    private int getIndexNumberArr(int num) {
         switch (num) {
             case 8 -> num = 0;
             case 7 -> num = 1;
@@ -247,9 +170,9 @@ public class ChessBoardServiceImp implements ChessBoardService {
         return num;
     }
 
-    private void removePawn(String pawnLocation) {
-        int indexLetter = getIndexLetter(pawnLocation.charAt(0));
-        int indexNumber = getIndexNumber(pawnLocation.charAt(1) - '0');
+    private void removePawnArr(String pawnLocation) {
+        int indexLetter = getIndexLetterArr(pawnLocation.charAt(0));
+        int indexNumber = getIndexNumberArr(pawnLocation.charAt(1) - '0');
         chessBoard.getChessBoard()[indexNumber][indexLetter] = '-';
     }
 }

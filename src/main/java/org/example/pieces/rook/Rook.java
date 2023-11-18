@@ -1,6 +1,5 @@
 package org.example.pieces.rook;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.example.pieces.Piece;
 import org.example.exception.PieceException;
@@ -32,13 +31,15 @@ public class Rook implements Piece {
     public void Move(String start, String end) {
         if (!isMoveValid(start, end)) {
             throw new PieceException(PieceExceptionMessage.INVALID_MOVE);
-        } else
-            isFirstMove = true;
-        chessBoardService.updatePosition(start, end);
-        coordinateLetter = end.charAt(0);
-        coordinateNumber = end.charAt(1) - '0';
-
+        } else {
+            move(start, end);
+        }
     }
+
+    public void moveAfterCastle(String start, String end) {
+        move(start, end);
+    }
+
 
     @Override
     public boolean isMoveValid(String start, String end) {
@@ -47,6 +48,12 @@ public class Rook implements Piece {
         }
         return false;
 
+    }
+    private void move(String start, String end) {
+        isFirstMove = true;
+        chessBoardService.updatePositionArr(start, end);
+        coordinateLetter = end.charAt(0);
+        coordinateNumber = end.charAt(1) - '0';
     }
 
     private boolean isFieldsOccupied(String start, String end) {

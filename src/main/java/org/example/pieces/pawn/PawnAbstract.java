@@ -36,7 +36,7 @@ public abstract class PawnAbstract implements Piece {
         if (!isMoveValid(start, end)) {
             throw new PieceException(PieceExceptionMessage.INVALID_MOVE);
         } else {
-            chessBoardServiceImp.updatePosition(start, end);
+            chessBoardServiceImp.updatePositionArr(start, end);
             CoordinateLetter = end.charAt(0);
             CoordinateNumber = end.charAt(1) - '0';
             ItsFirstMove = false;
