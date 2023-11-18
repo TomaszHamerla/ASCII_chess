@@ -19,4 +19,5 @@ public interface ChessBoardService {
     Optional<Piece> getPiece(String pawnLocation);
     void saveMove(String start, String end);
     List<String> getSavedMoves();
+    char[][] getChessBoardArr();
 }

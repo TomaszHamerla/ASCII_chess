@@ -20,12 +20,14 @@ class PawnAbstractTest {
     private ChessBoard chessBoard;
     private ChessBoardService chessBoardServiceImp;
     private List<Piece> list;
+    private List<String> moves;
 
     @BeforeEach
     public void setup() {
         chessBoard = new ChessBoard();
         chessBoardServiceImp = new ChessBoardServiceImp(chessBoard);
         list = new ArrayList<Piece>();
+        moves = new ArrayList<String>();
     }
 
     @Test
@@ -86,6 +88,35 @@ class PawnAbstractTest {
         list.addAll(Arrays.asList(pawn, opponentPawn));
         chessBoard.setPieces(list);
         assertFalse(pawn.isMoveValid("A2", "A3"));
+    }
+    @Test
+    void moveElPassant_True() {
+        PawnAbstract pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 4);
+        PawnAbstract opponentPawn = new Pawn(chessBoardServiceImp, Color.BLACK, 'B', 4);
+        moves.add("A2-A4");
+        chessBoard.setMoves(moves);
+        list.addAll(Arrays.asList(pawn, opponentPawn));
+        chessBoard.setPieces(list);
+        assertTrue(opponentPawn.isMoveValid("B4", "A3"));
+    }
+    @Test
+    void moveElPassant_EmptyList_False(){
+        PawnAbstract pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 4);
+        PawnAbstract opponentPawn = new Pawn(chessBoardServiceImp, Color.BLACK, 'B', 4);
+        list.addAll(Arrays.asList(pawn, opponentPawn));
+        chessBoard.setPieces(list);
+        assertFalse(opponentPawn.isMoveValid("B4", "A3"));
+    }
+    @Test
+    void moveElPassant_LastMoveIsNotCorrect_False(){
+        PawnAbstract pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 4);
+        PawnAbstract opponentPawn = new Pawn(chessBoardServiceImp, Color.BLACK, 'B', 4);
+        PawnAbstract placeholder = new Pawn(chessBoardServiceImp, Color.WHITE, 'C', 4);
+        moves.add("C2-C4");
+        chessBoard.setMoves(moves);
+        list.addAll(Arrays.asList(pawn, opponentPawn, placeholder));
+        chessBoard.setPieces(list);
+        assertFalse(opponentPawn.isMoveValid("B4", "A3"));
     }
 
 

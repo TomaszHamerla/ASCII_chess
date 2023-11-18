@@ -41,7 +41,6 @@ public class Game {
                String expectPawnLocation= src.nextLine();
               // chessBoardService.validExpectPawnLocation(expectPawnLocation.toUpperCase());
                chessBoardService.movePiece(pawnLocation.toUpperCase(),expectPawnLocation.toUpperCase());
-               chessBoardService.printChessBoardArr(chessBoard.getChessBoard());
                chessBoardService.saveMove(pawnLocation.toUpperCase(),expectPawnLocation.toUpperCase());
                chessBoardService.printChessBoardArr(chessBoard.getChessBoard());
                chessBoard.setWhiteTurn(!chessBoard.isWhiteTurn());

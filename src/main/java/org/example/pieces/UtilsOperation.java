@@ -67,6 +67,14 @@ public class UtilsOperation {
         chessBoardService.getPieces().remove(enemy);
     }
 
+    public static void removePieceArr(String expectPawnLocation, ChessBoardService chessBoardService) {
+        char[][] chessBoardArr = chessBoardService.getChessBoardArr();
+        int indexLetter = getIndexLetterArr(expectPawnLocation.charAt(0));
+        int indexNumber = getIndexNumberArr(expectPawnLocation.charAt(1) - '0');
+        chessBoardArr[indexNumber][indexLetter] = '-';
+    }
+
+
     public static boolean isEnemyOnExpectLocation(Color color, String expectPawnLocation, ChessBoardService chessBoardService) {
         Optional<Piece> piece = chessBoardService.getPiece(expectPawnLocation);
         if (piece.isPresent()) {
@@ -123,5 +131,35 @@ public class UtilsOperation {
     private static void setPieceCoordinate(Piece piece, String coordinate) {
         piece.setCoordinateLetter(coordinate.charAt(0));
         piece.setCoordinateNumber(coordinate.charAt(1) - '0');
+    }
+
+    public static int getIndexLetterArr(char letter) {
+        switch (letter) {
+            case 'A' -> letter = '0';
+            case 'B' -> letter = '1';
+            case 'C' -> letter = '2';
+            case 'D' -> letter = '3';
+            case 'E' -> letter = '4';
+            case 'F' -> letter = '5';
+            case 'G' -> letter = '6';
+            case 'H' -> letter = '7';
+            default -> throw new PieceException(PieceExceptionMessage.PIECE_LOCATION_NOT_FOUND);
+        }
+        return letter - '0';
+    }
+
+    public static int getIndexNumberArr(int num) {
+        switch (num) {
+            case 8 -> num = 0;
+            case 7 -> num = 1;
+            case 6 -> num = 2;
+            case 5 -> num = 3;
+            case 4 -> num = 4;
+            case 3 -> num = 5;
+            case 2 -> num = 6;
+            case 1 -> num = 7;
+            default -> throw new PieceException(PieceExceptionMessage.PIECE_LOCATION_NOT_FOUND);
+        }
+        return num;
     }
 }
