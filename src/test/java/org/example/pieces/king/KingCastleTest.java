@@ -26,13 +26,61 @@ public class KingCastleTest {
         pieces = new ArrayList<>();
     }
     @Test
-    void isCastlingValidMethodTest(){
-        King king = new King(chessBoardService, Color.WHITE,'E',1);
-        Rook rook = new Rook(chessBoardService, Color.WHITE,'H',1);
+    void isCastlingValidMethod_withKingFirstMoveIsTrue_shouldReturnFalse(){
+        King king = getWhiteKing();
         king.setFirstMove(true);
+        pieces.add(king);
+        chessBoard.setPieces(pieces);
+        assertFalse(king.isCastlingValid("E1","H1"));
+    }
+
+    @Test
+    void isCastValidMethod_withKingFirstMoveIsFalseAndRookFirstMoveIsTrue_shouldReturnFalse(){
+        King king = getWhiteKing();
+        Rook rook = getWhiteRook();
+        rook.setFirstMove(true);
         pieces.add(king);
         pieces.add(rook);
         chessBoard.setPieces(pieces);
-        assertFalse(king.isCastlingValid("E1","H1"));
+        assertFalse(king.isCastlingValid("E1","A1"));
+    }
+    @Test
+    void isCastValidMethod_withKingFirstMoveIsFalseAndRookFirstMoveIsFalseForWhites_shouldReturnTrue(){
+        King king = getWhiteKing();
+        Rook rook = getWhiteRook();
+        Rook rook1 = getWhiteRook();
+        rook1.setCoordinateLetter('H');
+        pieces.add(king);
+        pieces.add(rook);
+        pieces.add(rook1);
+        chessBoard.setPieces(pieces);
+        assertTrue(king.isCastlingValid("E1","A1"));
+        assertTrue(king.isCastlingValid("E1","H1"));
+    }
+    @Test
+    void isCastValidMethod_withKingFirstMoveIsFalseAndRookFirstMoveIsFalseForBlacks_shouldReturnTrue(){
+        King king = getBlackKing();
+        Rook rook = getBlackRook();
+        Rook rook1 = getBlackRook();
+        rook1.setCoordinateLetter('H');
+        pieces.add(king);
+        pieces.add(rook);
+        pieces.add(rook1);
+        chessBoard.setPieces(pieces);
+        assertTrue(king.isCastlingValid("E8","A8"));
+        assertTrue(king.isCastlingValid("E8","H8"));
+    }
+
+    private King getWhiteKing() {
+        return new King(chessBoardService, Color.WHITE, 'E', 1);
+    }
+    private Rook getWhiteRook() {
+        return new Rook(chessBoardService, Color.WHITE, 'A', 1);
+    }
+    private King getBlackKing() {
+        return new King(chessBoardService, Color.BLACK, 'E', 8);
+    }
+    private Rook getBlackRook() {
+        return new Rook(chessBoardService, Color.BLACK, 'A', 8);
     }
 }
