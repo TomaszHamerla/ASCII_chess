@@ -22,7 +22,6 @@ public abstract class PawnAbstract implements Piece {
         this.CoordinateLetter = CoordinateLetter;
         this.CoordinateNumber = CoordinateNumber;
         this.isCaptured = false;
-
     }
 
     private Color color;
@@ -45,7 +44,7 @@ public abstract class PawnAbstract implements Piece {
     }
     @Override
     public boolean isMoveValid(String start, String end) {
-        return (isValidLetter(start, end) && isValidNumber(start, end)) && !isFieldsOccupied(start, end);
+        return (isValidLetter(start, end) && isValidNumber(start, end)) && isFieldsNotOccupied(start, end);
     }
 
     private boolean isValidLetter(String start, String end) {
@@ -60,15 +59,16 @@ public abstract class PawnAbstract implements Piece {
         }
     }
 
-    private boolean isFieldsOccupied(String start, String end) {
+    private boolean isFieldsNotOccupied(String start, String end) {
         boolean result = false;
         for (String field : getFieldsBetween(start, end)) {
             if (chessBoardServiceImp.isFieldOccupied(field)) {
-                Piece pieceWithMakeMove = chessBoardServiceImp.getPiece(start).get();
-                Piece pieceOnField = chessBoardServiceImp.getPiece(field).get();
-                if (pieceWithMakeMove.getColor() == pieceOnField.getColor() || start.charAt(0) == end.charAt(0)) {
+                result = itIsCapture(start, end, field);
+            }else {
+                if (start.charAt(0) == end.charAt(0)) {
                     result = true;
                 }
+                result = !chessBoardServiceImp.getSavedMoves().isEmpty() && isEnPassantCapture(start, end, field);
             }
         }
         return result;
@@ -96,5 +96,29 @@ public abstract class PawnAbstract implements Piece {
         return fieldsToValidate;
     }
 
+    private boolean itIsCapture(String start, String end,  String field) {
+        boolean result = false;
+        Piece pieceWithMakeMove = chessBoardServiceImp.getPiece(start).get();
+        Piece pieceOnField = chessBoardServiceImp.getPiece(field).get();
+        if (pieceWithMakeMove.getColor() != pieceOnField.getColor() && start.charAt(0) != end.charAt(0)) {
+            result = true;
+        }
+        return result;
+    }
+    private boolean isEnPassantCapture(String start, String end, String field) {
+        boolean result = false;
+        String lastMove= chessBoardServiceImp.getSavedMoves().getLast();
+        String lastMoveStart = lastMove.substring(0,2);
+        String lastMoveEnd = lastMove.substring(2,4);
+        List<String> lastMoveFields = getFieldsBetween(lastMoveStart, lastMoveEnd);
+        boolean itWasFirstMoveByTwo = lastMoveFields.size() == 2;
+        boolean itWasPawn = chessBoardServiceImp.getPiece(lastMoveEnd).get() instanceof Pawn;
+        boolean itWasOpponentPawn = chessBoardServiceImp.getPiece(lastMoveEnd).get().getColor() != color;
+        boolean fieldIsBetween = lastMoveFields.indexOf(field) == 0;
+        if (itWasFirstMoveByTwo && itWasPawn && itWasOpponentPawn && fieldIsBetween) {
+            result = true;
+        }
+        return result;
+    }
 
 }

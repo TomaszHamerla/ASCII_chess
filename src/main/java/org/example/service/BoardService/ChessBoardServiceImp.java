@@ -123,6 +123,17 @@ public class ChessBoardServiceImp implements ChessBoardService {
                 .findFirst();
     }
 
+    @Override
+    public void saveMove(String start, String end) {
+        String move = start + "-"+ end;
+        chessBoard.getMoves().add(move);
+    }
+
+    @Override
+    public List<String> getSavedMoves(){
+        return chessBoard.getMoves();
+    }
+
     //    private boolean validTurn(Color color) {
 //        if (chessBoard.isWhiteTurn() && Color.WHITE.equals(color)) {
 //            return true;

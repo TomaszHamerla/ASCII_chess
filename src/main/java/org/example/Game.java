@@ -37,15 +37,12 @@ public class Game {
                System.out.print("Enter pawn location: ");
                String pawnLocation= src.nextLine();
               // chessBoardService.validPawnLocation(pawnLocation.toUpperCase());
-
                System.out.print("Enter expect pawn location: ");
                String expectPawnLocation= src.nextLine();
               // chessBoardService.validExpectPawnLocation(expectPawnLocation.toUpperCase());
-
                chessBoardService.movePiece(pawnLocation.toUpperCase(),expectPawnLocation.toUpperCase());
-
+               chessBoardService.saveMove(pawnLocation.toUpperCase(),expectPawnLocation.toUpperCase());
                chessBoardService.printChessBoard(chessBoard.getChessBoard());
-
                chessBoard.setWhiteTurn(!chessBoard.isWhiteTurn());
            }catch (Exception e){
                System.out.println(e.getMessage());
