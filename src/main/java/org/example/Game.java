@@ -43,7 +43,7 @@ public class Game {
                chessBoardService.movePiece(pawnLocation.toUpperCase(),expectPawnLocation.toUpperCase());
                chessBoardService.printChessBoardArr(chessBoard.getChessBoard());
                chessBoardService.saveMove(pawnLocation.toUpperCase(),expectPawnLocation.toUpperCase());
-               chessBoardService.printChessBoard(chessBoard.getChessBoard());
+               chessBoardService.printChessBoardArr(chessBoard.getChessBoard());
                chessBoard.setWhiteTurn(!chessBoard.isWhiteTurn());
            }catch (Exception e){
                System.out.println(e.getMessage());
