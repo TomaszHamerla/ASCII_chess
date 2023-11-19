@@ -1,14 +1,13 @@
 package org.example.service.BoardService;
 
 import lombok.RequiredArgsConstructor;
-import org.example.model.Color;
-import org.example.pieces.Piece;
 import org.example.exception.PieceException;
 import org.example.exception.PieceExceptionMessage;
 import org.example.model.ChessBoard;
+import org.example.model.Color;
+import org.example.pieces.Piece;
 import org.example.pieces.UtilsOperation;
 import org.example.pieces.pawn.Pawn;
-import org.example.pieces.pawn.PawnAbstract;
 
 import java.util.List;
 import java.util.Optional;

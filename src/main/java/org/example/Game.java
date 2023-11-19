@@ -26,12 +26,12 @@ public class Game {
                 Scanner src = new Scanner(System.in);
                 if (isKingUnderAttack(chessBoardService)) {
                     //TODO
-                    if (isCheckmateSituation(chessBoard.isWhiteTurn(), chessBoardService)) {
-                        System.out.println("Game Over !");
-                        printWinner();
-                        gameOver = false;
-                        break;
-                    }
+//                    if (isCheckmateSituation(chessBoardService)) {
+//                        System.out.println("Game Over !");
+//                        printWinner();
+//                        gameOver = false;
+//                        break;
+//                    }
                     System.out.println("King is in check !");
                 }
                 System.out.print("Enter pawn location: ");

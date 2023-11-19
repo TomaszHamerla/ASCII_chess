@@ -57,10 +57,20 @@ public class UtilsOperation {
     }
 
     //TODO
-    public static boolean isCheckmateSituation(boolean whiteTurn, ChessBoardService chessBoardService) {
-
-        return false;
-    }
+//    public static boolean isCheckmateSituation(ChessBoardService chessBoardService) {
+//        Color color = getCurrentColor(chessBoardService.getWhiteTurn());
+//        Piece king = getKing(chessBoardService, color);
+//        String kingPosition = getKingPosition(king);
+//        Piece piece = getPieceWhoCanCheck(chessBoardService, color, kingPosition).get();
+//        return chessBoardService.getPieces().stream()
+//                .noneMatch(p -> {
+//                            isMoveAllowed(getPPosition(p), getPPosition(piece), chessBoardService);   //sprawdzenie czy jest jakakolwiek figura, ktora moze zniszczy figure
+//                            p.isMoveValid(getPPosition(p), getPPosition(piece));                       //przeciwna szachujaca krola
+//                            return true;
+//                        }
+//                );
+//
+//    }
 
     public static void removePiece(String expectPawnLocation, ChessBoardService chessBoardService) {
         Piece enemy = chessBoardService.getPiece(expectPawnLocation).get();
@@ -90,7 +100,7 @@ public class UtilsOperation {
                 .findFirst();
     }
 
-    public static boolean isKingUnderAttack( ChessBoardService chessBoardService) {
+    public static boolean isKingUnderAttack(ChessBoardService chessBoardService) {
         Color color = getCurrentColor(chessBoardService.getWhiteTurn());
         Piece king = getKing(chessBoardService, color);
         String kingPosition = getKingPosition(king);
