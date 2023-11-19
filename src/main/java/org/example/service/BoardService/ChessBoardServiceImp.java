@@ -60,6 +60,10 @@ public class ChessBoardServiceImp implements ChessBoardService {
         int expectIndexNumber = UtilsOperation.getIndexNumberArr(expectPawnLocation.charAt(1) - '0');
         chessBoard.getChessBoard()[expectIndexNumber][expectIndexLetter] = figure;
     }
+    @Override
+    public boolean getWhiteTurn(){
+        return chessBoard.isWhiteTurn();
+    }
 
     @Override
     public boolean isFieldOccupied(String pawnLocation) {

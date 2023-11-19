@@ -90,8 +90,8 @@ public class UtilsOperation {
                 .findFirst();
     }
 
-    public static boolean isKingUnderAttack(boolean whiteTurn, ChessBoardService chessBoardService) {
-        Color color = getCurrentColor(whiteTurn);
+    public static boolean isKingUnderAttack( ChessBoardService chessBoardService) {
+        Color color = getCurrentColor(chessBoardService.getWhiteTurn());
         Piece king = getKing(chessBoardService, color);
         String kingPosition = getKingPosition(king);
         Optional<Piece> isCheck = chessBoardService.getPieces().stream()

@@ -24,7 +24,7 @@ public class Game {
             try {
                 printTurn();
                 Scanner src = new Scanner(System.in);
-                if (isKingUnderAttack(chessBoard.isWhiteTurn(), chessBoardService)) {
+                if (isKingUnderAttack(chessBoardService)) {
                     //TODO
                     if (isCheckmateSituation(chessBoard.isWhiteTurn(), chessBoardService)) {
                         System.out.println("Game Over !");
@@ -37,7 +37,7 @@ public class Game {
                 System.out.print("Enter pawn location: ");
                 String pawnLocation = src.nextLine();
                 //TODO unmute WHITE TURN
-                chessBoardService.validWhiteTurn(pawnLocation.toUpperCase());
+               // chessBoardService.validWhiteTurn(pawnLocation.toUpperCase());
                 System.out.print("Enter expect pawn location: ");
                 String expectPawnLocation = src.nextLine();
 

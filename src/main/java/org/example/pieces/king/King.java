@@ -27,12 +27,12 @@ public class King implements Piece {
 
     @Override
     public void Move(String start, String end) {
-        if (isCastlingValid(start, end)) {
-            moveAfterCastle(start,end);
+        if (isCastlingValid(start, end) && !UtilsOperation.isKingUnderAttack(chessBoardService)) {
+            moveAfterCastle(start, end);
         } else if (!isMoveValid(start, end)) {
             throw new PieceException(PieceExceptionMessage.INVALID_MOVE);
         } else {
-            move(start,end);
+            move(start, end);
         }
     }
 
@@ -42,28 +42,29 @@ public class King implements Piece {
 
         return checkCoordinate(start, end) && !isFieldsOccupied(start, end);
     }
-    private void move(String start, String end){
+
+    private void move(String start, String end) {
         isFirstMove = true;
         chessBoardService.updatePositionArr(start, end);
         coordinateLetter = end.charAt(0);
         coordinateNumber = end.charAt(1) - '0';
     }
 
-    private void moveAfterCastle(String pawnLocation,String expectPawnLocation) {
-        if (expectPawnLocation.charAt(0)=='H'){
-            King king =(King) chessBoardService.getPiece(pawnLocation).get();
+    private void moveAfterCastle(String pawnLocation, String expectPawnLocation) {
+        if (expectPawnLocation.charAt(0) == 'H') {
+            King king = (King) chessBoardService.getPiece(pawnLocation).get();
             Rook rook = (Rook) chessBoardService.getPiece(expectPawnLocation).get();
-            String kingLocation="G" + expectPawnLocation.charAt(1);
-            king.move(pawnLocation,kingLocation);
-            String rookLocation ="F"+expectPawnLocation.charAt(1);
-            rook.moveAfterCastle(expectPawnLocation,rookLocation);
-        }else {
-            King king =(King) chessBoardService.getPiece(pawnLocation).get();
+            String kingLocation = "G" + expectPawnLocation.charAt(1);
+            king.move(pawnLocation, kingLocation);
+            String rookLocation = "F" + expectPawnLocation.charAt(1);
+            rook.moveAfterCastle(expectPawnLocation, rookLocation);
+        } else {
+            King king = (King) chessBoardService.getPiece(pawnLocation).get();
             Rook rook = (Rook) chessBoardService.getPiece(expectPawnLocation).get();
-            String kingLocation="C" + expectPawnLocation.charAt(1);
-            king.move(pawnLocation,kingLocation);
-            String rookLocation ="D"+expectPawnLocation.charAt(1);
-            rook.moveAfterCastle(expectPawnLocation,rookLocation);
+            String kingLocation = "C" + expectPawnLocation.charAt(1);
+            king.move(pawnLocation, kingLocation);
+            String rookLocation = "D" + expectPawnLocation.charAt(1);
+            rook.moveAfterCastle(expectPawnLocation, rookLocation);
         }
 
     }
@@ -75,18 +76,22 @@ public class King implements Piece {
                 if (rookLocation.equals("A1")) {
                     Rook rook = (Rook) chessBoardService.getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
                     if (!rook.isFirstMove()) {
-                        UtilsOperation.isMoveAllowed(kingLocation, "D1", chessBoardService);
-                        UtilsOperation.isMoveAllowed(kingLocation, "C1", chessBoardService);
-                        UtilsOperation.isMoveAllowed(kingLocation, "B1", chessBoardService);
-                        return true;
+                        if (!chessBoardService.isFieldOccupied("D1") && !chessBoardService.isFieldOccupied("C1") && !chessBoardService.isFieldOccupied("B1")) {
+                            UtilsOperation.isMoveAllowed(kingLocation, "D1", chessBoardService);
+                            UtilsOperation.isMoveAllowed(kingLocation, "C1", chessBoardService);
+                            UtilsOperation.isMoveAllowed(kingLocation, "B1", chessBoardService);
+                            return true;
+                        }
                     }
                     return false;
                 } else if (rookLocation.equals("H1")) {
                     Rook rook = (Rook) chessBoardService.getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
                     if (!rook.isFirstMove()) {
-                        UtilsOperation.isMoveAllowed(kingLocation, "F1", chessBoardService);
-                        UtilsOperation.isMoveAllowed(kingLocation, "G1", chessBoardService);
-                        return true;
+                        if (!chessBoardService.isFieldOccupied("F1") && !chessBoardService.isFieldOccupied("G1")) {
+                            UtilsOperation.isMoveAllowed(kingLocation, "F1", chessBoardService);
+                            UtilsOperation.isMoveAllowed(kingLocation, "G1", chessBoardService);
+                            return true;
+                        }
                     }
                     return false;
                 }
@@ -98,18 +103,22 @@ public class King implements Piece {
                 if (rookLocation.equals("A8")) {
                     Rook rook = (Rook) chessBoardService.getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
                     if (!rook.isFirstMove()) {
-                        UtilsOperation.isMoveAllowed(kingLocation, "D8", chessBoardService);
-                        UtilsOperation.isMoveAllowed(kingLocation, "C8", chessBoardService);
-                        UtilsOperation.isMoveAllowed(kingLocation, "B8", chessBoardService);
-                        return true;
+                        if (!chessBoardService.isFieldOccupied("D8") && !chessBoardService.isFieldOccupied("C8") && !chessBoardService.isFieldOccupied("B8")) {
+                            UtilsOperation.isMoveAllowed(kingLocation, "D8", chessBoardService);
+                            UtilsOperation.isMoveAllowed(kingLocation, "C8", chessBoardService);
+                            UtilsOperation.isMoveAllowed(kingLocation, "B8", chessBoardService);
+                            return true;
+                        }
                     }
                     return false;
                 } else if (rookLocation.equals("H8")) {
                     Rook rook = (Rook) chessBoardService.getPiece(rookLocation).orElseThrow(() -> new PieceException(PieceExceptionMessage.PIECE_NOT_FOUND));
                     if (!rook.isFirstMove()) {
-                        UtilsOperation.isMoveAllowed(kingLocation, "F8", chessBoardService);
-                        UtilsOperation.isMoveAllowed(kingLocation, "G8", chessBoardService);
-                        return true;
+                        if (!chessBoardService.isFieldOccupied("F8") && !chessBoardService.isFieldOccupied("G8")) {
+                            UtilsOperation.isMoveAllowed(kingLocation, "F8", chessBoardService);
+                            UtilsOperation.isMoveAllowed(kingLocation, "G8", chessBoardService);
+                            return true;
+                        }
                     }
                     return false;
                 }
