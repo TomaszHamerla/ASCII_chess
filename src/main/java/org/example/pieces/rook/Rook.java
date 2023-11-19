@@ -7,13 +7,15 @@ import org.example.exception.PieceExceptionMessage;
 import org.example.model.Color;
 
 import org.example.pieces.UtilsOperation;
+import org.example.pieces.moves.Castling;
+import org.example.pieces.moves.ValidatorForForwardMove;
 import org.example.service.BoardService.ChessBoardService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class Rook implements Piece {
+public class Rook implements Piece, ValidatorForForwardMove, Castling {
     private final ChessBoardService chessBoardService;
     private Color color;
     private char coordinateLetter;
@@ -36,6 +38,12 @@ public class Rook implements Piece {
         }
     }
 
+    @Override
+    public boolean validateForwardMove(String start, String end) {
+        return (validLetter(start.charAt(0), end.charAt(0)) || validNumber(start.charAt(1) - '0', end.charAt(1) - '0'));
+    }
+
+    @Override
     public void moveAfterCastle(String start, String end) {
         move(start, end);
     }
@@ -43,12 +51,13 @@ public class Rook implements Piece {
 
     @Override
     public boolean isMoveValid(String start, String end) {
-        if ((validLetter(start.charAt(0), end.charAt(0)) || validNumber(start.charAt(1) - '0', end.charAt(1) - '0')) && !isFieldsOccupied(start, end)) {
+        if ((validateForwardMove(start, end)) && !isFieldsOccupied(start, end)) {
             return true;
         }
         return false;
 
     }
+
     private void move(String start, String end) {
         isFirstMove = true;
         chessBoardService.updatePositionArr(start, end);

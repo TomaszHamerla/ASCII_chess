@@ -6,12 +6,13 @@ import org.example.exception.PieceExceptionMessage;
 import org.example.model.Color;
 import org.example.pieces.Piece;
 import org.example.pieces.UtilsOperation;
+import org.example.pieces.moves.Castling;
 import org.example.pieces.rook.Rook;
 import org.example.service.BoardService.ChessBoardService;
 
 
 @Data
-public class King implements Piece {
+public class King implements Piece, Castling {
     private final ChessBoardService chessBoardService;
     private Color color;
     private char coordinateLetter;
@@ -50,7 +51,8 @@ public class King implements Piece {
         coordinateNumber = end.charAt(1) - '0';
     }
 
-    private void moveAfterCastle(String pawnLocation, String expectPawnLocation) {
+    @Override
+    public void moveAfterCastle(String pawnLocation, String expectPawnLocation) {
         if (expectPawnLocation.charAt(0) == 'H') {
             King king = (King) chessBoardService.getPiece(pawnLocation).get();
             Rook rook = (Rook) chessBoardService.getPiece(expectPawnLocation).get();
