@@ -14,52 +14,55 @@ import static org.example.pieces.UtilsOperation.*;
 public class Game {
     private final ChessBoardService chessBoardService;
     private final ChessBoard chessBoard;
-    private boolean gameOver=true;
+    private boolean gameOver = true;
 
     public void run() {
 
         chessBoardService.printChessBoardArr(chessBoard.getChessBoard());
-       do {
+        do {
 
-           try {
-               printTurn();
-               Scanner src = new Scanner(System.in);
-               if (isKingUnderAttack(chessBoard.isWhiteTurn(),chessBoardService)){
-                   //TODO
-                   if (isCheckmateSituation(chessBoard.isWhiteTurn(),chessBoardService)){
-                       System.out.println("Game Over !");
-                       printWinner();
-                       gameOver = false;
-                       break;
-                   }
-                   System.out.println("King is in check !");
-               }
-               System.out.print("Enter pawn location: ");
-               String pawnLocation= src.nextLine();
-              // chessBoardService.validPawnLocation(pawnLocation.toUpperCase());
-               System.out.print("Enter expect pawn location: ");
-               String expectPawnLocation= src.nextLine();
-              // chessBoardService.validExpectPawnLocation(expectPawnLocation.toUpperCase());
-               chessBoardService.movePiece(pawnLocation.toUpperCase(),expectPawnLocation.toUpperCase());
-               chessBoardService.saveMove(pawnLocation.toUpperCase(),expectPawnLocation.toUpperCase());
-               chessBoardService.printChessBoardArr(chessBoard.getChessBoard());
-               chessBoard.setWhiteTurn(!chessBoard.isWhiteTurn());
-           }catch (Exception e){
-               System.out.println(e.getMessage());
-               System.out.println("Pleas try again");
-           }
-       }while(gameOver);
+            try {
+                printTurn();
+                Scanner src = new Scanner(System.in);
+                if (isKingUnderAttack(chessBoard.isWhiteTurn(), chessBoardService)) {
+                    //TODO
+                    if (isCheckmateSituation(chessBoard.isWhiteTurn(), chessBoardService)) {
+                        System.out.println("Game Over !");
+                        printWinner();
+                        gameOver = false;
+                        break;
+                    }
+                    System.out.println("King is in check !");
+                }
+                System.out.print("Enter pawn location: ");
+                String pawnLocation = src.nextLine();
+                //TODO unmute WHITE TURN
+                chessBoardService.validWhiteTurn(pawnLocation.toUpperCase());
+                System.out.print("Enter expect pawn location: ");
+                String expectPawnLocation = src.nextLine();
+
+                chessBoardService.movePiece(pawnLocation.toUpperCase(), expectPawnLocation.toUpperCase());
+                chessBoardService.saveMove(pawnLocation.toUpperCase(), expectPawnLocation.toUpperCase());
+                chessBoardService.printChessBoardArr(chessBoard.getChessBoard());
+                chessBoard.setWhiteTurn(!chessBoard.isWhiteTurn());
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                System.out.println("Pleas try again");
+            }
+        } while (gameOver);
     }
-   private void printTurn(){
-        if (chessBoard.isWhiteTurn()){
+
+    private void printTurn() {
+        if (chessBoard.isWhiteTurn()) {
             System.out.println("Its whites turn");
-        }else
+        } else
             System.out.println("Its blacks turn");
     }
-    private void printWinner(){
-        if (chessBoard.isWhiteTurn()){
+
+    private void printWinner() {
+        if (chessBoard.isWhiteTurn()) {
             System.out.println("Whites");
-        }else
+        } else
             System.out.println("Blacks");
     }
 }

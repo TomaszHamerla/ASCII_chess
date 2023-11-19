@@ -1,6 +1,7 @@
 package org.example.service.BoardService;
 
 import lombok.RequiredArgsConstructor;
+import org.example.model.Color;
 import org.example.pieces.Piece;
 import org.example.exception.PieceException;
 import org.example.exception.PieceExceptionMessage;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 public class ChessBoardServiceImp implements ChessBoardService {
     private final ChessBoard chessBoard;
+
     @Override
     public void printChessBoardArr(char[][] chessBoard) {
         int a = 8;
@@ -44,8 +46,8 @@ public class ChessBoardServiceImp implements ChessBoardService {
             throw new PieceException(PieceExceptionMessage.CHESS_CHECK_EXCEPTION);
         }
         UtilsOperation.isMoveAllowed(pawnLocation, expectPawnLocation, this);
-       if ( !(piece instanceof Pawn) && UtilsOperation.isEnemyOnExpectLocation(piece.getColor(), expectPawnLocation, this)) {
-           UtilsOperation.removePiece(expectPawnLocation, this);
+        if (!(piece instanceof Pawn) && UtilsOperation.isEnemyOnExpectLocation(piece.getColor(), expectPawnLocation, this)) {
+            UtilsOperation.removePiece(expectPawnLocation, this);
         }
         piece.Move(pawnLocation, expectPawnLocation);
     }
@@ -66,38 +68,20 @@ public class ChessBoardServiceImp implements ChessBoardService {
                 .anyMatch(piece -> piece.getCoordinateLetter() == pawnLocation.charAt(0) && piece.getCoordinateNumber() == pawnLocation.charAt(1) - '0');
 //TODO -> moze isc do serwisu opartego o sama liste pionkow
     }
+
     @Override
-    public  char[][] getChessBoardArr(){
+    public char[][] getChessBoardArr() {
         return chessBoard.getChessBoard();
     }
 
-//    @Override
-//    public void validPawnLocation(String pawnLocation) {
-//        validLocations(pawnLocation);
-//        char figure = getFigure(pawnLocation);
-//        Optional<Piece> piece = getPiece(pawnLocation);
-//        if (piece.isEmpty()){
-//            throw new PawnException(PawnExceptionMessage.PAWN_NOT_FOUND);
-//        }
-//        if (!validTurn(piece.get().getColor())) {
-//            throw new PawnException(PawnExceptionMessage.INVALID_TURN_MOVE);
-//        }
-//        if (figure == '-') {
-//            throw new PawnException(PawnExceptionMessage.PAWN_LOCATION_NOT_FOUND);
-//        }
-//
-//    }
-
-//    @Override
-//    public void validExpectPawnLocation(String expectPawnLocation) {
-//        validLocations(expectPawnLocation);
-//        char figure = getFigure(expectPawnLocation);
-//
-//        if (figure!='-'){ //TODO tutaj dodac || flaga canHit zeby moc zbic pionka ktorego chcemy
-//            throw new PawnException(PawnExceptionMessage.PAWN_LOCATION_NOT_FOUND);
-//        }
-//    }
-
+    //TODO unmute
+    @Override
+    public void validWhiteTurn(String pawnLocation) {
+           Optional<Piece> piece = getPiece(pawnLocation);
+        if (!validTurn(piece.get().getColor())) {
+            throw new PieceException(PieceExceptionMessage.INVALID_TURN_MOVE);
+        }
+    }
     @Override
     public List<Piece> getPieces() {
         return chessBoard.getPieces();
@@ -116,30 +100,24 @@ public class ChessBoardServiceImp implements ChessBoardService {
 
     @Override
     public void saveMove(String start, String end) {
-        String move = start + "-"+ end;
+        String move = start + "-" + end;
         chessBoard.getMoves().add(move);
     }
 
     @Override
-    public List<String> getSavedMoves(){
+    public List<String> getSavedMoves() {
         return chessBoard.getMoves();
     }
 
-    //    private boolean validTurn(Color color) {
-//        if (chessBoard.isWhiteTurn() && Color.WHITE.equals(color)) {
-//            return true;
-//
-//        } else if (!chessBoard.isWhiteTurn() && Color.BLACK.equals(color)) {
-//            return true;
-//        }
-//        return false;
-//    }
-//    private void validLocations(String location) {
-//        if (location.length() > 2) {
-//            throw new PawnException(PawnExceptionMessage.PAWN_LOCATION_NOT_FOUND);
-//        }
-//
-//    }
+    private boolean validTurn(Color color) {
+        if (chessBoard.isWhiteTurn() && Color.WHITE.equals(color)) {
+            return true;
+
+        } else if (!chessBoard.isWhiteTurn() && Color.BLACK.equals(color)) {
+            return true;
+        }
+        return false;
+    }
 
     private char getFigureArr(String pawnLocation) {
         int indexLetter = UtilsOperation.getIndexLetterArr(pawnLocation.charAt(0));
