@@ -6,6 +6,7 @@ import org.example.exception.PieceExceptionMessage;
 import org.example.model.Color;
 import org.example.pieces.Piece;
 import org.example.pieces.UtilsOperation;
+import org.example.pieces.king.King;
 import org.example.service.BoardService.ChessBoardService;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Data
-public class PawnAbstract implements Piece {
+public abstract  class PawnAbstract implements Piece {
 
     private final ChessBoardService chessBoardServiceImp;
 
@@ -21,7 +22,7 @@ public class PawnAbstract implements Piece {
     private boolean ItsFirstMove;
     private char CoordinateLetter;
     private int CoordinateNumber;
-    private boolean isCaptured;
+
 
     public PawnAbstract(ChessBoardService chessBoardServiceImp, char CoordinateLetter, int CoordinateNumber, Color color) {
         this.chessBoardServiceImp = chessBoardServiceImp;
@@ -29,7 +30,6 @@ public class PawnAbstract implements Piece {
         this.ItsFirstMove = true;
         this.CoordinateLetter = CoordinateLetter;
         this.CoordinateNumber = CoordinateNumber;
-        this.isCaptured = false;
 
     }
 
@@ -42,6 +42,9 @@ public class PawnAbstract implements Piece {
             CoordinateLetter = end.charAt(0);
             CoordinateNumber = end.charAt(1) - '0';
             ItsFirstMove = false;
+            if(itIsCorrectCapture(start, end, end) && !(chessBoardServiceImp.getPiece(end).get() instanceof King)){
+                UtilsOperation.removePiece(end, chessBoardServiceImp);
+            }
         }
     }
 
@@ -109,9 +112,6 @@ public class PawnAbstract implements Piece {
         if (pieceWithMakeMove != null && pieceOnField != null &&
                 pieceWithMakeMove.getColor() != pieceOnField.getColor() && start.charAt(0) != end.charAt(0)) {
             result = true;
-        }
-        if (result) {
-            UtilsOperation.removePiece(field, chessBoardServiceImp);
         }
         return result;
     }
