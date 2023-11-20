@@ -78,7 +78,8 @@ public class UtilsOperation {
         Piece king = getKing(chessBoardService, color);
         String kingPosition = getKingPosition(king);
         List<Piece> piecesWhoCanCheck = getPiecesWhoCanCheck(chessBoardService, color, kingPosition);
-        List<Piece> pieces = chessBoardService.getPieces();
+        List<Piece> pieces = chessBoardService.getPieces().stream()
+                .filter(p->p.getColor().equals(color)).toList();
         boolean result = true;
         for (Piece value : piecesWhoCanCheck) {
             for (Piece piece : pieces) {
