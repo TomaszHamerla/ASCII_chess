@@ -74,6 +74,9 @@ public class UtilsOperation {
 
     public static void removePiece(String expectPawnLocation, ChessBoardService chessBoardService) {
         Piece enemy = chessBoardService.getPiece(expectPawnLocation).get();
+        if(enemy instanceof King){
+            throw new PieceException(PieceExceptionMessage.INVALID_PIECE_REMOVE);
+        }
         chessBoardService.getPieces().remove(enemy);
     }
 

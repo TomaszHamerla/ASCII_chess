@@ -10,6 +10,7 @@ public enum PieceExceptionMessage {
     INVALID_TURN_MOVE("Its turn from enemy !"),
     INVALID_OPERATION("You can not hit your piece !"),
     PIECE_NOT_FOUND("Piece not found !"),
+    INVALID_PIECE_REMOVE("You can not remove the king !"),
     CHESS_CHECK_EXCEPTION("King is in check. Illegal move.");
 
     private String message;
