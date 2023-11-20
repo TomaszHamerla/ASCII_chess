@@ -6,18 +6,16 @@ import org.example.model.Color;
 import org.example.pieces.king.King;
 import org.example.service.BoardService.ChessBoardService;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class UtilsOperation {
     public static boolean isTeamMatePieceAtLocation(String start, String end, ChessBoardService chessBoardService) {
         if (chessBoardService.isFieldOccupied(end)) {
             Piece piece = chessBoardService.getPiece(end).get();
             Piece pieceFromStartLocation = chessBoardService.getPiece(start).get();
-            if (piece.getColor() != pieceFromStartLocation.getColor()) {
-                return false;
-            } else {
-                return true;
-            }
+            return piece.getColor() == pieceFromStartLocation.getColor();
         }
         return false;
     }
@@ -29,10 +27,23 @@ public class UtilsOperation {
         Color color = piece.getColor();
         Piece king = getKing(chessBoardService, color);
         String kingPosition = getKingPosition(king);
-        Optional<Piece> canCheck = getPieceWhoCanCheck(chessBoardService, color, kingPosition);
-        if (canCheck.isPresent()) {
-            setPieceCoordinate(piece, startLocation);
-            throw new PieceException(PieceExceptionMessage.INVALID_MOVE);
+        List<Piece> pieceWhoCanCheck = getPieceWhoCanCheck(chessBoardService, color, kingPosition);
+        if (!pieceWhoCanCheck.isEmpty()) {
+            if (pieceWhoCanCheck.size() == 1 && getPPosition(pieceWhoCanCheck.get(0)).equals(kingPosition)) {
+                Piece pieceWhoIscChecking = pieceWhoCanCheck.get(0);
+                String pieceWhoIsCheckingPosition = getPPosition(pieceWhoCanCheck.get(0));
+                setPieceCoordinate(pieceWhoIscChecking, "00");
+                if (!getPieceWhoCanCheck(chessBoardService, color, kingPosition).isEmpty()) {
+                    setPieceCoordinate(piece, startLocation);
+                    setPieceCoordinate(pieceWhoIscChecking, pieceWhoIsCheckingPosition);
+                    throw new PieceException(PieceExceptionMessage.INVALID_MOVE);
+                }
+                setPieceCoordinate(pieceWhoIscChecking, pieceWhoIsCheckingPosition);
+                setPieceCoordinate(piece, startLocation);
+            } else {
+                setPieceCoordinate(piece, startLocation);
+                throw new PieceException(PieceExceptionMessage.INVALID_MOVE);
+            }
         } else {
             setPieceCoordinate(piece, startLocation);
         }
@@ -46,8 +57,14 @@ public class UtilsOperation {
         Color color = piece.getColor();
         Piece king = getKing(chessBoardService, color);
         String kingPosition = getKingPosition(king);
-        Optional<Piece> pieceWhoCanCheck = getPieceWhoCanCheck(chessBoardService, color, kingPosition);
-        if (pieceWhoCanCheck.isPresent()) {
+        List<Piece> pieceWhoCanCheck = getPieceWhoCanCheck(chessBoardService, color, kingPosition);
+        if (!pieceWhoCanCheck.isEmpty()) {
+            for (Piece p : pieceWhoCanCheck) {
+                if (getPPosition(p).equals(kingPosition)) {
+                    setPieceCoordinate(piece, startLocation);
+                    return true;
+                }
+            }
             setPieceCoordinate(piece, startLocation);
             return false;
         } else {
@@ -74,7 +91,7 @@ public class UtilsOperation {
 
     public static void removePiece(String expectPawnLocation, ChessBoardService chessBoardService) {
         Piece enemy = chessBoardService.getPiece(expectPawnLocation).get();
-        if(enemy instanceof King){
+        if (enemy instanceof King) {
             throw new PieceException(PieceExceptionMessage.INVALID_PIECE_REMOVE);
         }
         chessBoardService.getPieces().remove(enemy);
@@ -96,22 +113,19 @@ public class UtilsOperation {
         return false;
     }
 
-    private static Optional<Piece> getPieceWhoCanCheck(ChessBoardService chessBoardService, Color color, String kingPosition) {
+    private static List<Piece> getPieceWhoCanCheck(ChessBoardService chessBoardService, Color color, String kingPosition) {
         return chessBoardService.getPieces().stream()
                 .filter(p -> (p.getColor() != color)
                         && (p.isMoveValid(getPPosition(p), kingPosition)))
-                .findFirst();
+                .collect(Collectors.toList());
     }
 
     public static boolean isKingUnderAttack(ChessBoardService chessBoardService) {
         Color color = getCurrentColor(chessBoardService.getWhiteTurn());
         Piece king = getKing(chessBoardService, color);
         String kingPosition = getKingPosition(king);
-        Optional<Piece> isCheck = chessBoardService.getPieces().stream()
-                .filter(p -> p.getColor() != color
-                        && p.isMoveValid(getPPosition(p), kingPosition))
-                .findFirst();
-        return isCheck.isPresent();
+        List<Piece> pieceWhoCanCheck = getPieceWhoCanCheck(chessBoardService, color, kingPosition);
+        return !pieceWhoCanCheck.isEmpty();
 
     }
 
