@@ -35,22 +35,23 @@ public abstract  class PawnAbstract implements Piece {
 
     @Override
     public void Move(String start, String end) {
-        if (!isMoveValid(start, end)) {
-            throw new PieceException(PieceExceptionMessage.INVALID_MOVE);
-        } else {
+        if (isMoveValid(start, end)) {
+            if (itIsRegularCapture(start, end)){
+                UtilsOperation.removePiece(end, chessBoardServiceImp);
+            }
             chessBoardServiceImp.updatePositionArr(start, end);
             CoordinateLetter = end.charAt(0);
             CoordinateNumber = end.charAt(1) - '0';
             ItsFirstMove = false;
-            if(itIsCorrectCapture(start, end, end) && !(chessBoardServiceImp.getPiece(end).get() instanceof King)){
-                UtilsOperation.removePiece(end, chessBoardServiceImp);
-            }
+        }
+        else {
+            throw new PieceException(PieceExceptionMessage.INVALID_MOVE);
         }
     }
 
     @Override
     public boolean isMoveValid(String start, String end) {
-        return (isValidLetter(start, end) && isValidNumber(start, end)) && isFieldsNotOccupied(start, end);
+        return (isValidLetter(start, end) && isValidNumber(start, end)) && (itIsRegularMove(start, end) || itIsCaptureMove(start, end));
     }
 
     private boolean isValidLetter(String start, String end) {
@@ -64,22 +65,45 @@ public abstract  class PawnAbstract implements Piece {
             return end.charAt(1) == start.charAt(1) - 1 || (ItsFirstMove && end.charAt(1) == start.charAt(1) - 2);
         }
     }
-
-    private boolean isFieldsNotOccupied(String start, String end) {
-        for (String field : getFieldsBetween(start, end)) {
-            if (start.charAt(0) != end.charAt(0)) {
-                if (chessBoardServiceImp.isFieldOccupied(field)) {
-                    return itIsCorrectCapture(start, end, field);
-                } else {
-                    return !chessBoardServiceImp.getSavedMoves().isEmpty() && isEnPassantCapture(start, end, field);
-                }
-            } else if (chessBoardServiceImp.isFieldOccupied(field)) {
-                return false;
+    private boolean itIsRegularMove(String start, String end) {
+        return !chessBoardServiceImp.isFieldOccupied(end) && start.charAt(0) == end.charAt(0);
+    }
+    private boolean itIsCaptureMove(String start, String end) {
+        return  isValidCapture(start, end) && ( itIsRegularCapture(start, end) || itIsEnPassantCapture(start, end));
+    }
+    private boolean isValidCapture(String start, String end) {
+        return start.charAt(0) != end.charAt(0) && (start.charAt(1) == end.charAt(1) + 1 || start.charAt(1) == end.charAt(1) - 1);
+    }
+    private boolean itIsRegularCapture(String start, String end) {
+        boolean result = false;
+        Piece pieceWithMakeMove = chessBoardServiceImp.getPiece(start).orElse(null);
+        Piece pieceOnField = chessBoardServiceImp.getPiece(end).orElse(null);
+        if (pieceWithMakeMove != null && pieceOnField != null && pieceWithMakeMove.getColor() != pieceOnField.getColor()) {
+            result = true;
+        }
+        return result;
+    }
+    private  boolean itIsEnPassantCapture(String start, String end) {
+        if(chessBoardServiceImp.getSavedMoves().isEmpty()) return false;
+        String lastMove = chessBoardServiceImp.getSavedMoves().get(chessBoardServiceImp.getSavedMoves().size() - 1);
+        String lastMoveStart = lastMove.substring(0, 2);
+        String lastMoveEnd = lastMove.substring(3, 5);
+        List<String> lastMoveFields = getFieldsBetween(lastMoveStart, lastMoveEnd);
+        boolean itWasFirstMoveByTwo = lastMoveFields.size() == 2;
+        boolean itWasPawn = chessBoardServiceImp.getPiece(lastMoveEnd).map(p -> p instanceof PawnAbstract).orElse(false);
+        boolean itWasOpponentPawn = chessBoardServiceImp.getPiece(lastMoveEnd).map(p -> p.getColor() != color).orElse(false);
+        boolean fieldIsBetween = !lastMoveFields.isEmpty() && lastMoveFields.indexOf(end) == 0;
+        boolean isDestinationFieldEmpty = !chessBoardServiceImp.isFieldOccupied(end);
+        boolean result = itWasFirstMoveByTwo && itWasPawn && itWasOpponentPawn && fieldIsBetween && isDestinationFieldEmpty;
+        if (result) {
+            Piece capturedPiece = chessBoardServiceImp.getPiece(lastMoveEnd).orElse(null);
+            if (capturedPiece != null) {
+                UtilsOperation.removePiece(lastMoveEnd, chessBoardServiceImp);
+                UtilsOperation.removePieceArr(lastMoveEnd, chessBoardServiceImp);
             }
         }
-        return true;
+        return result;
     }
-
     private List<String> getFieldsBetween(String startField, String endField) {
         Piece piece = chessBoardServiceImp.getPiece(startField).orElse(chessBoardServiceImp.getPiece(endField).orElse(null));
         if (piece == null) {
@@ -105,37 +129,6 @@ public abstract  class PawnAbstract implements Piece {
         return fieldsToValidate;
     }
 
-    private boolean itIsCorrectCapture(String start, String end, String field) {
-        boolean result = false;
-        Piece pieceWithMakeMove = chessBoardServiceImp.getPiece(start).orElse(null);
-        Piece pieceOnField = chessBoardServiceImp.getPiece(field).orElse(null);
-        if (pieceWithMakeMove != null && pieceOnField != null &&
-                pieceWithMakeMove.getColor() != pieceOnField.getColor() && start.charAt(0) != end.charAt(0)) {
-            result = true;
-        }
-        return result;
-    }
 
-    private boolean isEnPassantCapture(String start, String end, String field) {
-
-        String lastMove = chessBoardServiceImp.getSavedMoves().get(chessBoardServiceImp.getSavedMoves().size() - 1);
-        String lastMoveStart = lastMove.substring(0, 2);
-        String lastMoveEnd = lastMove.substring(3, 5);
-        List<String> lastMoveFields = getFieldsBetween(lastMoveStart, lastMoveEnd);
-        boolean itWasFirstMoveByTwo = lastMoveFields.size() == 2;
-        boolean itWasPawn = chessBoardServiceImp.getPiece(lastMoveEnd).map(p -> p instanceof PawnAbstract).orElse(false);
-        boolean itWasOpponentPawn = chessBoardServiceImp.getPiece(lastMoveEnd).map(p -> p.getColor() != color).orElse(false);
-        boolean fieldIsBetween = !lastMoveFields.isEmpty() && lastMoveFields.indexOf(field) == 0;
-        boolean isDestinationFieldEmpty = !chessBoardServiceImp.isFieldOccupied(end);
-        boolean result = itWasFirstMoveByTwo && itWasPawn && itWasOpponentPawn && fieldIsBetween && isDestinationFieldEmpty;
-        if (result) {
-            Piece capturedPiece = chessBoardServiceImp.getPiece(lastMoveEnd).orElse(null);
-            if (capturedPiece != null) {
-                UtilsOperation.removePiece(lastMoveEnd, chessBoardServiceImp);
-                UtilsOperation.removePieceArr(lastMoveEnd, chessBoardServiceImp);
-            }
-        }
-        return result;
-    }
 
 }
