@@ -105,8 +105,12 @@ public class UtilsOperation {
         int indexNumber = getIndexNumberArr(expectPawnLocation.charAt(1) - '0');
         chessBoardArr[indexNumber][indexLetter] = '-';
     }
-
-
+    public static void  addPieceArr(String expectPawnLocation, ChessBoardService chessBoardService, char figure) {
+        char[][] chessBoardArr = chessBoardService.getChessBoardArr();
+        int indexLetter = getIndexLetterArr(expectPawnLocation.charAt(0));
+        int indexNumber = getIndexNumberArr(expectPawnLocation.charAt(1) - '0');
+        chessBoardArr[indexNumber][indexLetter] = figure;
+    }
     public static boolean isEnemyOnExpectLocation(Color color, String expectPawnLocation, ChessBoardService chessBoardService) {
         Optional<Piece> piece = chessBoardService.getPiece(expectPawnLocation);
         if (piece.isPresent()) {

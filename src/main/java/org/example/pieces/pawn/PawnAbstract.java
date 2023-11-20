@@ -6,12 +6,14 @@ import org.example.exception.PieceExceptionMessage;
 import org.example.model.Color;
 import org.example.pieces.Piece;
 import org.example.pieces.UtilsOperation;
+import org.example.pieces.bishop.Bishop;
 import org.example.pieces.king.King;
+import org.example.pieces.knight.Knight;
+import org.example.pieces.queen.Queen;
+import org.example.pieces.rook.Rook;
 import org.example.service.BoardService.ChessBoardService;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import static java.lang.System.in;
 
 @Data
 public abstract  class PawnAbstract implements Piece {
@@ -36,13 +38,14 @@ public abstract  class PawnAbstract implements Piece {
     @Override
     public void Move(String start, String end) {
         if (isMoveValid(start, end)) {
-            if (itIsRegularCapture(start, end)){
+            if (itIsRegularCapture(start, end))
                 UtilsOperation.removePiece(end, chessBoardServiceImp);
-            }
             chessBoardServiceImp.updatePositionArr(start, end);
             CoordinateLetter = end.charAt(0);
             CoordinateNumber = end.charAt(1) - '0';
             ItsFirstMove = false;
+            if(pawnPromotion(end))
+                addPieceToBoard(end);
         }
         else {
             throw new PieceException(PieceExceptionMessage.INVALID_MOVE);
@@ -128,7 +131,43 @@ public abstract  class PawnAbstract implements Piece {
         }
         return fieldsToValidate;
     }
-
-
-
+    private boolean pawnPromotion(String end) {
+        return (color == Color.WHITE && end.charAt(1) == '8') || (color == Color.BLACK && end.charAt(1) == '1');
+    }
+    private Piece getPromotionPiece(String end, char figure) {
+        Piece piece = null;
+        switch (figure) {
+            case 'Q':
+                piece = new Queen(chessBoardServiceImp, color,end.charAt(0), end.charAt(1) -'0');
+                break;
+            case 'R':
+                piece = new Rook(chessBoardServiceImp,color, end.charAt(0), end.charAt(1) -'0');
+                break;
+            case 'B':
+                piece = new Bishop(chessBoardServiceImp,color, end.charAt(0) , end.charAt(1) -'0');
+                break;
+            case 'N':
+                piece = new Knight(chessBoardServiceImp,color, end.charAt(0) , end.charAt(1) -'0');
+                break;
+        }
+        return piece;
+    }
+    private void addPieceToBoard(String end) {
+        Scanner scanner = new Scanner(in);
+        System.out.print("Choose piece to promote: Q - Queen, R - Rook, B - Bishop, N - Knight");
+        char figure = scanner.nextLine().toUpperCase().charAt(0);
+        List<Character> validFigures = Arrays.asList('Q', 'R', 'B', 'N');
+        if (!validFigures.contains(figure)) {
+            addPieceToBoard(end);
+        }
+        Piece piece = getPromotionPiece(end, figure);
+        if (color == Color.WHITE) {
+            figure = Character.toLowerCase(figure);
+        } else {
+            figure = Character.toUpperCase(figure);
+        }
+        UtilsOperation.removePiece(end, chessBoardServiceImp);
+        UtilsOperation.addPieceArr(end, chessBoardServiceImp, figure);
+        chessBoardServiceImp.getPieces().add(piece);
+    }
 }
