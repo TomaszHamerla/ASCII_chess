@@ -55,7 +55,7 @@ public class Bishop implements Piece, ValidatorForCrossMove {
         }
         return false;
     }
-    private List<String> getFieldsBetweenCross(String start, String end){
+    public List<String> getFieldsBetweenCross(String start, String end){
         List<String> fieldsBetween = new ArrayList<>();
         if (start.charAt(0) < end.charAt(0) && start.charAt(1) < end.charAt(1)) {
             for (char row = (char) (start.charAt(0) + 1), col = (char) (start.charAt(1) + 1); row <= end.charAt(0) && col <= end.charAt(1); row++, col++) {

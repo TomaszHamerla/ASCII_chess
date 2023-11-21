@@ -73,7 +73,7 @@ public class Rook implements Piece, ValidatorForForwardMove, Castling {
         return false;
     }
 
-    private List<String> getFieldsBetween(String start, String end) {
+    public List<String> getFieldsBetween(String start, String end) {
         List<String> fieldsBetween = new ArrayList<>();
         if (validLetter(start.charAt(0), end.charAt(0))) {
             if (start.charAt(1) - '0' < end.charAt(1) - '0') {

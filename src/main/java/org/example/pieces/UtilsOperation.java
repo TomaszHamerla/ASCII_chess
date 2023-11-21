@@ -3,11 +3,17 @@ package org.example.pieces;
 import org.example.exception.PieceException;
 import org.example.exception.PieceExceptionMessage;
 import org.example.model.Color;
+import org.example.pieces.bishop.Bishop;
 import org.example.pieces.king.King;
+import org.example.pieces.knight.Knight;
+import org.example.pieces.pawn.PawnAbstract;
+import org.example.pieces.queen.Queen;
+import org.example.pieces.rook.Rook;
 import org.example.service.BoardService.ChessBoardService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 public class UtilsOperation {
@@ -79,16 +85,91 @@ public class UtilsOperation {
         String kingPosition = getKingPosition(king);
         List<Piece> piecesWhoCanCheck = getPiecesWhoCanCheck(chessBoardService, color, kingPosition);
         List<Piece> pieces = chessBoardService.getPieces().stream()
-                .filter(p->p.getColor().equals(color)).toList();
-        boolean result = true;
-        for (Piece value : piecesWhoCanCheck) {
-            for (Piece piece : pieces) {
-                if (piece.isMoveValid(getPPosition(piece), getPPosition(value))) {
-                    result = false;
+                .filter(p -> p.getColor().equals(color)).toList();
+        if (isCapturePossible(piecesWhoCanCheck, pieces)) {
+            return false;
+        } else if (isPossibleToCover(piecesWhoCanCheck, pieces, kingPosition)) {
+            return false;
+//        } else if (isPossibleToMoveKing(chessBoardService, king)) {
+//            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private static boolean isPossibleToMoveKing(ChessBoardService chessBoardService, Piece king) {
+        String kingPosition = getKingPosition(king);
+        for (String position : getFieldsAroundKing(kingPosition)) {
+            try {
+                isMoveAllowed(kingPosition, position, chessBoardService);
+                if (king.isMoveValid(kingPosition, position)) {
+                    return true;
+                }
+            } catch (PieceException ignored) {
+            }
+        }
+        return false;
+    }
+
+    private static List<String> getFieldsAroundKing(String kingPosition) {
+       //if ()
+
+return null;
+    }
+
+    private static boolean isPossibleToCover(List<Piece> piecesWhoCanCheck, List<Piece> pieces, String kingPosition) {
+        if (isAnyWhoHaveFieldsBetween(piecesWhoCanCheck)) {
+            return false;
+        }
+        for (Piece p : piecesWhoCanCheck) {
+            if (p instanceof Rook) {
+                Rook rook = (Rook) p;
+                List<String> fieldsBetween = rook.getFieldsBetween(getPPosition(rook), kingPosition);
+                return checkFieldsBetween(fieldsBetween, pieces);
+            } else if (p instanceof Bishop) {
+                Bishop bishop = (Bishop) p;
+                List<String> fieldsBetween = bishop.getFieldsBetweenCross(getPPosition(bishop), kingPosition);
+                return checkFieldsBetween(fieldsBetween, pieces);
+            } else if (p instanceof Queen) {
+                if (((Queen) p).validateForwardMove(getPPosition(p), kingPosition)) {
+                    Queen q = (Queen) p;
+                    List<String> fieldsBetween = ((Queen) p).getFieldsBetweenForward(getPPosition(p), kingPosition);
+                    return checkFieldsBetween(fieldsBetween, pieces);
+                } else {
+                    Queen q = (Queen) p;
+                    List<String> fieldsBetween = ((Queen) p).getFieldsBetweenCross(getPPosition(p), kingPosition);
+                    return checkFieldsBetween(fieldsBetween, pieces);
                 }
             }
         }
-        return result;
+        return false;
+    }
+
+    private static boolean checkFieldsBetween(List<String> fieldsBetween, List<Piece> pieces) {
+        for (String field : fieldsBetween) {
+            for (Piece p : pieces) {
+                if (p.isMoveValid(getPPosition(p), field)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean isAnyWhoHaveFieldsBetween(List<Piece> piecesWhoCanCheck) {
+        return piecesWhoCanCheck.stream()
+                .anyMatch(p -> p instanceof Knight || p instanceof PawnAbstract);
+    }
+
+    private static boolean isCapturePossible(List<Piece> piecesWhoCanCheck, List<Piece> pieces) {
+        for (Piece value : piecesWhoCanCheck) {                                     //sprawdza
+            for (Piece piece : pieces) {                                                //czy jest jakakolwiek figura ktora
+                if (piece.isMoveValid(getPPosition(piece), getPPosition(value))) {          // moze zaatakowac figure szachujaca
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static void removePiece(String expectPawnLocation, ChessBoardService chessBoardService) {
@@ -105,12 +186,14 @@ public class UtilsOperation {
         int indexNumber = getIndexNumberArr(expectPawnLocation.charAt(1) - '0');
         chessBoardArr[indexNumber][indexLetter] = '-';
     }
-    public static void  addPieceArr(String expectPawnLocation, ChessBoardService chessBoardService, char figure) {
+
+    public static void addPieceArr(String expectPawnLocation, ChessBoardService chessBoardService, char figure) {
         char[][] chessBoardArr = chessBoardService.getChessBoardArr();
         int indexLetter = getIndexLetterArr(expectPawnLocation.charAt(0));
         int indexNumber = getIndexNumberArr(expectPawnLocation.charAt(1) - '0');
         chessBoardArr[indexNumber][indexLetter] = figure;
     }
+
     public static boolean isEnemyOnExpectLocation(Color color, String expectPawnLocation, ChessBoardService chessBoardService) {
         Optional<Piece> piece = chessBoardService.getPiece(expectPawnLocation);
         if (piece.isPresent()) {

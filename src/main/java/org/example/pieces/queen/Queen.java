@@ -68,7 +68,7 @@ public class Queen implements Piece, ValidatorForCrossMove, ValidatorForForwardM
         }
         return false;
     }
-    private List<String> getFieldsBetweenForward(String start, String end) {
+    public List<String> getFieldsBetweenForward(String start, String end) {
         List<String> fieldsBetween = new ArrayList<>();
         if (start.charAt(0) == end.charAt(0)) {
             if (start.charAt(1) < end.charAt(1)) {
@@ -93,7 +93,7 @@ public class Queen implements Piece, ValidatorForCrossMove, ValidatorForForwardM
         }
         return fieldsBetween;
     }
-    private List<String> getFieldsBetweenCross(String start, String end){
+    public List<String> getFieldsBetweenCross(String start, String end){
         List<String> fieldsBetween = new ArrayList<>();
         if (start.charAt(0) < end.charAt(0) && start.charAt(1) < end.charAt(1)) {
             for (char row = (char) (start.charAt(0) + 1), col = (char) (start.charAt(1) + 1); row <= end.charAt(0) && col <= end.charAt(1); row++, col++) {
