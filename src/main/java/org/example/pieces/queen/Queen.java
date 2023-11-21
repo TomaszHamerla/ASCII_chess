@@ -35,14 +35,7 @@ public class Queen implements Piece, ValidatorForCrossMove, ValidatorForForwardM
     public boolean isMoveValid(String start, String end) {
         return (validateCrossMove(start, end) || validateForwardMove(start, end)) && !isFieldOccupied(start, end);
     }
-    @Override
-    public boolean validateCrossMove(String start, String end) {
-        return Math.abs(start.charAt(0) - end.charAt(0)) == Math.abs(start.charAt(1) - end.charAt(1));
-    }
-    @Override
-    public boolean validateForwardMove(String start, String end) {
-        return (start.charAt(0) == end.charAt(0) || start.charAt(1) == end.charAt(1));
-    }
+
     private boolean isFieldOccupied(String start, String end) {
         boolean result = true;
         if (validateForwardMove(start, end)) {

@@ -37,10 +37,6 @@ public class Bishop implements Piece, ValidatorForCrossMove {
         return validateCrossMove(start, end)  && !isFieldOccupied(start, end);
     }
 
-    @Override
-    public boolean validateCrossMove(String start, String end) {
-        return Math.abs(start.charAt(0) - end.charAt(0)) == Math.abs(start.charAt(1) - end.charAt(1));
-    }
     private boolean isFieldOccupied(String start, String end) {
         boolean result = true;
         if (validateCrossMove(start, end)) {

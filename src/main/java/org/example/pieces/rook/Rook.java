@@ -39,11 +39,6 @@ public class Rook implements Piece, ValidatorForForwardMove, Castling {
     }
 
     @Override
-    public boolean validateForwardMove(String start, String end) {
-        return (validLetter(start.charAt(0), end.charAt(0)) || validNumber(start.charAt(1) - '0', end.charAt(1) - '0'));
-    }
-
-    @Override
     public void moveAfterCastle(String start, String end) {
         move(start, end);
     }
@@ -103,10 +98,6 @@ public class Rook implements Piece, ValidatorForForwardMove, Castling {
 
             }
         return fieldsBetween;
-    }
-
-    private boolean validNumber(int start, int end) {
-        return start == end;
     }
 
     private boolean validLetter(char start, char end) {
