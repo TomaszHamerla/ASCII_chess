@@ -4,6 +4,7 @@ import org.example.pieces.Piece;
 import org.example.pieces.king.King;
 import org.example.pieces.knight.Knight;
 import org.example.pieces.pawn.Pawn;
+import org.example.pieces.queen.Queen;
 import org.example.pieces.rook.Rook;
 import org.example.model.ChessBoard;
 import org.example.model.Color;
@@ -47,7 +48,9 @@ public class Main {
                 new Knight(chessBoardService,Color.WHITE,'B',1),
                 new Knight(chessBoardService,Color.WHITE,'G',1),
                 new Knight(chessBoardService,Color.BLACK,'B',8),
-                new Knight(chessBoardService,Color.BLACK,'G',8)
+                new Knight(chessBoardService,Color.BLACK,'G',8),
+                new Queen(chessBoardService,Color.WHITE,'D',1),
+                new Queen(chessBoardService,Color.BLACK,'D',8)
         ));
         chessBoard.setPieces(test);
 
