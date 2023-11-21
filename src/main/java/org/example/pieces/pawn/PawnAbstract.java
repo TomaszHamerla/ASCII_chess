@@ -154,7 +154,7 @@ public abstract  class PawnAbstract implements Piece {
     }
     private void addPieceToBoard(String end) {
         Scanner scanner = new Scanner(in);
-        System.out.print("Choose piece to promote: Q - Queen, R - Rook, B - Bishop, N - Knight");
+        System.out.print("Choose piece to promote: Q - Queen, R - Rook, B - Bishop, N - Knight: ");
         char figure = scanner.nextLine().toUpperCase().charAt(0);
         List<Character> validFigures = Arrays.asList('Q', 'R', 'B', 'N');
         if (!validFigures.contains(figure)) {

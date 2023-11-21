@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.pieces.Piece;
+import org.example.pieces.bishop.Bishop;
 import org.example.pieces.king.King;
 import org.example.pieces.knight.Knight;
 import org.example.pieces.pawn.Pawn;
@@ -50,7 +51,11 @@ public class Main {
                 new Knight(chessBoardService,Color.BLACK,'B',8),
                 new Knight(chessBoardService,Color.BLACK,'G',8),
                 new Queen(chessBoardService,Color.WHITE,'D',1),
-                new Queen(chessBoardService,Color.BLACK,'D',8)
+                new Queen(chessBoardService,Color.BLACK,'D',8),
+                new Bishop(chessBoardService, Color.WHITE,'C',1),
+                new Bishop(chessBoardService, Color.WHITE,'F',1),
+                new Bishop(chessBoardService, Color.BLACK,'C',8),
+                new Bishop(chessBoardService, Color.BLACK,'F',8)
         ));
         chessBoard.setPieces(test);
 
