@@ -33,7 +33,7 @@ class PawnAbstractTest {
     @Test
     void movePawnOneField() {
 
-        PawnAbstract pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 2);
+        Pawn pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 2);
         list.add(pawn);
         chessBoard.setPieces(list);
         assertTrue(pawn.isMoveValid("A2", "A3"));
@@ -41,7 +41,7 @@ class PawnAbstractTest {
 
     @Test
     void movePawnTwoFieldsTrue() {
-        PawnAbstract pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 2);
+        Pawn pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 2);
         list.add(pawn);
         chessBoard.setPieces(list);
         assertTrue(pawn.isMoveValid("A2", "A4"));
@@ -49,7 +49,7 @@ class PawnAbstractTest {
 
     @Test
     void movePawnTwoFieldsFalse() {
-        PawnAbstract pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 2);
+        Pawn pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 2);
         pawn.setItsFirstMove(false);
         list.add(pawn);
         chessBoard.setPieces(list);
@@ -58,8 +58,8 @@ class PawnAbstractTest {
 
     @Test
     void movePawnCaptureTrue() {
-        PawnAbstract pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 2);
-        PawnAbstract opponentPawn = new Pawn(chessBoardServiceImp, Color.BLACK, 'B', 3);
+        Pawn pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 2);
+        Pawn opponentPawn = new Pawn(chessBoardServiceImp, Color.BLACK, 'B', 3);
         list.addAll(Arrays.asList(pawn, opponentPawn));
         chessBoard.setPieces(list);
         assertTrue(pawn.isMoveValid("A2", "B3"));
@@ -67,7 +67,7 @@ class PawnAbstractTest {
 
     @Test
     void movePawnCaptureEmptyFieldFalse() {
-        PawnAbstract pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 2);
+        Pawn pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 2);
         list.add(pawn);
         chessBoard.setPieces(list);
         assertFalse(pawn.isMoveValid("A2", "B3"));
@@ -75,24 +75,24 @@ class PawnAbstractTest {
 
     @Test
     void movePawnCaptureAllayPawnFalse() {
-        PawnAbstract pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 2);
-        PawnAbstract opponentPawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'B', 3);
+        Pawn pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 2);
+        Pawn opponentPawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'B', 3);
         list.addAll(Arrays.asList(pawn, opponentPawn));
         chessBoard.setPieces(list);
         assertFalse(pawn.isMoveValid("A2", "B3"));
     }
     @Test
     void movePawnBlock() {
-        PawnAbstract pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 2);
-        PawnAbstract opponentPawn = new Pawn(chessBoardServiceImp, Color.BLACK, 'A', 3);
+        Pawn pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 2);
+        Pawn opponentPawn = new Pawn(chessBoardServiceImp, Color.BLACK, 'A', 3);
         list.addAll(Arrays.asList(pawn, opponentPawn));
         chessBoard.setPieces(list);
         assertFalse(pawn.isMoveValid("A2", "A3"));
     }
     @Test
     void moveElPassant_True() {
-        PawnAbstract pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 4);
-        PawnAbstract opponentPawn = new Pawn(chessBoardServiceImp, Color.BLACK, 'B', 4);
+        Pawn pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 4);
+        Pawn opponentPawn = new Pawn(chessBoardServiceImp, Color.BLACK, 'B', 4);
         moves.add("A2-A4");
         chessBoard.setMoves(moves);
         list.addAll(Arrays.asList(pawn, opponentPawn));
@@ -101,17 +101,17 @@ class PawnAbstractTest {
     }
     @Test
     void moveElPassant_EmptyList_False(){
-        PawnAbstract pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 4);
-        PawnAbstract opponentPawn = new Pawn(chessBoardServiceImp, Color.BLACK, 'B', 4);
+        Pawn pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 4);
+        Pawn opponentPawn = new Pawn(chessBoardServiceImp, Color.BLACK, 'B', 4);
         list.addAll(Arrays.asList(pawn, opponentPawn));
         chessBoard.setPieces(list);
         assertFalse(opponentPawn.isMoveValid("B4", "A3"));
     }
     @Test
     void moveElPassant_LastMoveIsNotCorrect_False(){
-        PawnAbstract pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 4);
-        PawnAbstract opponentPawn = new Pawn(chessBoardServiceImp, Color.BLACK, 'B', 4);
-        PawnAbstract placeholder = new Pawn(chessBoardServiceImp, Color.WHITE, 'C', 4);
+        Pawn pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 4);
+        Pawn opponentPawn = new Pawn(chessBoardServiceImp, Color.BLACK, 'B', 4);
+        Pawn placeholder = new Pawn(chessBoardServiceImp, Color.WHITE, 'C', 4);
         moves.add("C2-C4");
         chessBoard.setMoves(moves);
         list.addAll(Arrays.asList(pawn, opponentPawn, placeholder));
