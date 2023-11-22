@@ -5,6 +5,7 @@ import org.example.model.Color;
 import org.example.pieces.Piece;
 import org.example.pieces.UtilsOperation;
 import org.example.pieces.king.King;
+import org.example.pieces.knight.Knight;
 import org.example.pieces.queen.Queen;
 import org.example.pieces.rook.Rook;
 import org.example.service.BoardService.ChessBoardService;
@@ -32,6 +33,7 @@ public class IsCheckmateSituationTest {
         king = getKing();
         pieces.add(king);
         chessBoard.setPieces(pieces);
+        chessBoard.setWhiteTurn(false);
     }
 
     @Test
@@ -40,8 +42,13 @@ public class IsCheckmateSituationTest {
         Rook rook = new Rook(chessBoardService, Color.WHITE, 'H', 7);
         pieces.add(rook);
         pieces.add(queen);
-        chessBoard.setWhiteTurn(false);
         assertTrue(UtilsOperation.isCheckmateSituation(chessBoardService));
+    }
+    @Test
+    void isCheckmateSituation_whenIsNotMate_returnFalse(){
+        Knight knight = new Knight(chessBoardService,Color.WHITE,'C',7);
+        pieces.add(knight);
+        assertFalse(UtilsOperation.isCheckmateSituation(chessBoardService));
     }
 
     private King getKing() {

@@ -128,7 +128,7 @@ public class UtilsOperation {
         List<String> allFields = new ArrayList<>();
         for (char i = 'A'; i < 'I'; i++) {
             for (int j = 1; j < 9; j++) {
-                allFields.add(String.valueOf(i + j));
+                allFields.add(i+String.valueOf(j));
             }
         }
         return allFields;
