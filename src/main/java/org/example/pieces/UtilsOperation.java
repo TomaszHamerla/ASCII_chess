@@ -11,6 +11,7 @@ import org.example.pieces.queen.Queen;
 import org.example.pieces.rook.Rook;
 import org.example.service.BoardService.ChessBoardService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
@@ -78,7 +79,10 @@ public class UtilsOperation {
         }
     }
 
-    //TODO
+// szach mat wystepuje wtedy gdy:
+    //1. Nie ma mozliwosci zbica figury ktora szchuje
+    //2. Nie ma mozliwosci zasloniecia figury szachujacej
+    //3. Krol nie ma dostepnego pola gdzie moze uciec
     public static boolean isCheckmateSituation(ChessBoardService chessBoardService) {
         Color color = getCurrentColor(chessBoardService.getWhiteTurn());
         Piece king = getKing(chessBoardService, color);
@@ -86,12 +90,12 @@ public class UtilsOperation {
         List<Piece> piecesWhoCanCheck = getPiecesWhoCanCheck(chessBoardService, color, kingPosition);
         List<Piece> pieces = chessBoardService.getPieces().stream()
                 .filter(p -> p.getColor().equals(color)).toList();
-        if (isCapturePossible(piecesWhoCanCheck, pieces)) {
+        if (isCapturePossible(piecesWhoCanCheck, pieces)) { // 1
             return false;
-        } else if (isPossibleToCover(piecesWhoCanCheck, pieces, kingPosition)) {
+        } else if (isPossibleToCover(piecesWhoCanCheck, pieces, kingPosition)) { //2
             return false;
-//        } else if (isPossibleToMoveKing(chessBoardService, king)) {
-//            return false;
+        } else if (isPossibleToMoveKing(chessBoardService, king)) {         //3
+            return false;
         } else {
             return true;
         }
@@ -99,22 +103,37 @@ public class UtilsOperation {
 
     private static boolean isPossibleToMoveKing(ChessBoardService chessBoardService, Piece king) {
         String kingPosition = getKingPosition(king);
-        for (String position : getFieldsAroundKing(kingPosition)) {
+        for (String position : getFieldsAroundKing(king)) {
             try {
                 isMoveAllowed(kingPosition, position, chessBoardService);
-                if (king.isMoveValid(kingPosition, position)) {
-                    return true;
-                }
+                return true;
             } catch (PieceException ignored) {
             }
         }
         return false;
     }
 
-    private static List<String> getFieldsAroundKing(String kingPosition) {
-       //if ()
+    private static List<String> getFieldsAroundKing(Piece king) {
+        List<String> fields = new ArrayList<>();
+        List<String> allFields = getAllFields();
+        for (String filed : allFields) {
+            if (king.isMoveValid(getKingPosition(king), filed)) {
+                fields.add(filed);
+            }
+        }
 
-return null;
+
+        return null;
+    }
+
+    private static List<String> getAllFields() {
+        List<String> allFields = new ArrayList<>();
+        for (char i = 'A'; i < 'I'; i++) {
+            for (int j = 1; j < 9; j++) {
+                allFields.add(String.valueOf(i + j));
+            }
+        }
+        return allFields;
     }
 
     private static boolean isPossibleToCover(List<Piece> piecesWhoCanCheck, List<Piece> pieces, String kingPosition) {
@@ -215,7 +234,6 @@ return null;
         String kingPosition = getKingPosition(king);
         List<Piece> pieceWhoCanCheck = getPiecesWhoCanCheck(chessBoardService, color, kingPosition);
         return !pieceWhoCanCheck.isEmpty();
-
     }
 
     private static Color getCurrentColor(boolean whiteTurn) {
