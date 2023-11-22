@@ -89,7 +89,7 @@ public class UtilsOperation {
         String kingPosition = getKingPosition(king);
         List<Piece> piecesWhoCanCheck = getPiecesWhoCanCheck(chessBoardService, color, kingPosition);
         List<Piece> pieces = chessBoardService.getPieces().stream()
-                .filter(p -> p.getColor().equals(color)).toList();
+                .filter(p -> p.getColor().equals(color)  && !(p instanceof King)).toList();
         if (isCapturePossible(piecesWhoCanCheck, pieces)) { // 1
             return false;
         } else if (isPossibleToCover(piecesWhoCanCheck, pieces, kingPosition)) { //2
@@ -121,9 +121,7 @@ public class UtilsOperation {
                 fields.add(filed);
             }
         }
-
-
-        return null;
+        return fields;
     }
 
     private static List<String> getAllFields() {
