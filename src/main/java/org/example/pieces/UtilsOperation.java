@@ -6,7 +6,7 @@ import org.example.model.Color;
 import org.example.pieces.bishop.Bishop;
 import org.example.pieces.king.King;
 import org.example.pieces.knight.Knight;
-import org.example.pieces.pawn.PawnAbstract;
+import org.example.pieces.pawn.Pawn;
 import org.example.pieces.queen.Queen;
 import org.example.pieces.rook.Rook;
 import org.example.service.BoardService.ChessBoardService;
@@ -14,7 +14,6 @@ import org.example.service.BoardService.ChessBoardService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Queue;
 import java.util.stream.Collectors;
 
 public class UtilsOperation {
@@ -175,7 +174,7 @@ public class UtilsOperation {
 
     private static boolean isAnyWhoHaveFieldsBetween(List<Piece> piecesWhoCanCheck) {
         return piecesWhoCanCheck.stream()
-                .anyMatch(p -> p instanceof Knight || p instanceof PawnAbstract);
+                .anyMatch(p -> p instanceof Knight || p instanceof Pawn);
     }
 
     private static boolean isCapturePossible(List<Piece> piecesWhoCanCheck, List<Piece> pieces) {
