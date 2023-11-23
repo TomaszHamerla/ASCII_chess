@@ -99,6 +99,17 @@ public class UtilsOperation {
             return true;
         }
     }
+    public static boolean isStalemate(ChessBoardService chessBoardService){
+        if (isRoyalPairPresent(chessBoardService)){
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean isRoyalPairPresent(ChessBoardService chessBoardService) {
+        List<Piece> pieces = chessBoardService.getPieces();
+        return pieces.size() == 2;
+    }
 
     private static boolean isPossibleToMoveKing(ChessBoardService chessBoardService, Piece king) {
         String kingPosition = getKingPosition(king);
