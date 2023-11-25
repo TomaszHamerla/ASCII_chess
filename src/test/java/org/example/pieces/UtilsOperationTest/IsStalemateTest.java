@@ -6,6 +6,8 @@ import org.example.pieces.Piece;
 import org.example.pieces.UtilsOperation;
 import org.example.pieces.king.King;
 import org.example.pieces.knight.Knight;
+import org.example.pieces.pawn.Pawn;
+import org.example.pieces.queen.Queen;
 import org.example.service.BoardService.ChessBoardService;
 import org.example.service.BoardService.ChessBoardServiceImp;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,8 +16,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class IsStalemateTest {
     private ChessBoard chessBoard;
@@ -36,7 +37,7 @@ public class IsStalemateTest {
         King blackKing = new King(chessBoardService, Color.BLACK,'E',4);
         pieces.add(blackKing);
         pieces.add(whiteKing);
-        assertTrue(UtilsOperation.isStalemate(chessBoardService));
+        assertTrue(UtilsOperation.isRoyalPairPresent(chessBoardService));
     }
     @Test
     void isRoyalPairPresent_withMoreThen2Kings_returnFalse(){
@@ -46,6 +47,22 @@ public class IsStalemateTest {
         pieces.add(knight);
         pieces.add(blackKing);
         pieces.add(whiteKing);
-        assertFalse(UtilsOperation.isStalemate(chessBoardService));
+        assertFalse(UtilsOperation.isRoyalPairPresent(chessBoardService));
+    }
+    @Test
+    void isAllMovesBlocked_withNoOpportunitiesToMove_returnTrue(){
+        King whiteKing = new King(chessBoardService, Color.WHITE,'E',1);
+        King blackKing = new King(chessBoardService, Color.BLACK,'A',8);
+        Queen queen = new Queen(chessBoardService, Color.WHITE,'B',1);
+        Queen queen1 = new Queen(chessBoardService, Color.WHITE,'C',7);
+        Pawn pawn1 = new Pawn(chessBoardService, Color.BLACK,'E',2);
+        Knight knight = new Knight(chessBoardService, Color.WHITE,'E',1);
+        pieces.add(whiteKing);
+        pieces.add(blackKing);
+        pieces.add(queen);
+        pieces.add(queen1);
+        pieces.add(pawn1);
+        pieces.add(knight);
+        assertTrue(UtilsOperation.isStalemate(chessBoardService));
     }
 }

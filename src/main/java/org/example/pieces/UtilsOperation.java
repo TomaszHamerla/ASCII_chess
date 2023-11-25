@@ -78,7 +78,7 @@ public class UtilsOperation {
         }
     }
 
-// szach mat wystepuje wtedy gdy:
+    // szach mat wystepuje wtedy gdy:
     //1. Nie ma mozliwosci zbica figury ktora szchuje
     //2. Nie ma mozliwosci zasloniecia figury szachujacej
     //3. Krol nie ma dostepnego pola gdzie moze uciec
@@ -88,7 +88,7 @@ public class UtilsOperation {
         String kingPosition = getKingPosition(king);
         List<Piece> piecesWhoCanCheck = getPiecesWhoCanCheck(chessBoardService, color, kingPosition);
         List<Piece> pieces = chessBoardService.getPieces().stream()
-                .filter(p -> p.getColor().equals(color)  && !(p instanceof King)).toList();
+                .filter(p -> p.getColor().equals(color) && !(p instanceof King)).toList();
         if (isCapturePossible(piecesWhoCanCheck, pieces)) { // 1
             return false;
         } else if (isPossibleToCover(piecesWhoCanCheck, pieces, kingPosition)) { //2
@@ -99,14 +99,35 @@ public class UtilsOperation {
             return true;
         }
     }
-    public static boolean isStalemate(ChessBoardService chessBoardService){
-        if (isRoyalPairPresent(chessBoardService)){
+
+    public static boolean isStalemate(ChessBoardService chessBoardService) {
+        if (isRoyalPairPresent(chessBoardService)) {
+            return true;
+        } else if (isAllMovesBlocked(chessBoardService)) {
             return true;
         }
         return false;
     }
 
-    private static boolean isRoyalPairPresent(ChessBoardService chessBoardService) {
+    private static boolean isAllMovesBlocked(ChessBoardService chessBoardService) {
+        List<Piece> piecesWhoCanMoves = getAllPiecesWhoCanMoves(chessBoardService);
+        if (piecesWhoCanMoves.isEmpty()) {
+            return true;
+        }
+        Piece king = getKing(chessBoardService, getCurrentColor(chessBoardService.getWhiteTurn()));
+        return isPossibleToMoveKing(chessBoardService,king);
+    }
+
+    private static List<Piece> getAllPiecesWhoCanMoves(ChessBoardService chessBoardService) {
+        Color color = getCurrentColor(chessBoardService.getWhiteTurn());
+        List<String> allFields = getAllFields();
+        return chessBoardService.getPieces().stream()
+                .filter(p -> p.getColor().equals(color) && !(p instanceof King) &&
+                        allFields.stream().anyMatch(f -> p.isMoveValid(getPPosition(p), f)))
+                .collect(Collectors.toList());
+    }
+
+    public static boolean isRoyalPairPresent(ChessBoardService chessBoardService) {
         List<Piece> pieces = chessBoardService.getPieces();
         return pieces.size() == 2;
     }
@@ -138,7 +159,7 @@ public class UtilsOperation {
         List<String> allFields = new ArrayList<>();
         for (char i = 'A'; i < 'I'; i++) {
             for (int j = 1; j < 9; j++) {
-                allFields.add(i+String.valueOf(j));
+                allFields.add(i + String.valueOf(j));
             }
         }
         return allFields;
