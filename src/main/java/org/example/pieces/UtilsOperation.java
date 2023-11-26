@@ -112,10 +112,13 @@ public class UtilsOperation {
     private static boolean isAllMovesBlocked(ChessBoardService chessBoardService) {
         List<Piece> piecesWhoCanMoves = getAllPiecesWhoCanMoves(chessBoardService);
         if (piecesWhoCanMoves.isEmpty()) {
+            Piece king = getKing(chessBoardService, getCurrentColor(chessBoardService.getWhiteTurn()));
+            if (isPossibleToMoveKing(chessBoardService, king)) {
+                return false;
+            }
             return true;
         }
-        Piece king = getKing(chessBoardService, getCurrentColor(chessBoardService.getWhiteTurn()));
-        return isPossibleToMoveKing(chessBoardService,king);
+        return false;
     }
 
     private static List<Piece> getAllPiecesWhoCanMoves(ChessBoardService chessBoardService) {
