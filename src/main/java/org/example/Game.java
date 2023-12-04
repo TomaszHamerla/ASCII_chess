@@ -34,6 +34,11 @@ public class Game {
                     }
                     System.out.println("King is in check !");
                 }
+                if(isStalemate(chessBoardService)){
+                    System.out.println("Game over, is stalemate !");
+                    gameOver=false;
+                    break;
+                }
                 System.out.print("Enter pawn location: ");
                 String pawnLocation = src.nextLine();
                 //TODO unmute WHITE TURN
