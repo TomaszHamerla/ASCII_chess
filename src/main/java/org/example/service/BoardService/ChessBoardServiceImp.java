@@ -102,12 +102,6 @@ public class ChessBoardServiceImp implements ChessBoardService {
     }
 
     @Override
-    public void saveMove(String start, String end) {
-        String move = start + "-" + end;
-        chessBoard.getMoves().add(move);
-    }
-
-    @Override
     public List<String> getSavedMoves() {
         return chessBoard.getMoves();
     }

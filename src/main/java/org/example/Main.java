@@ -11,18 +11,24 @@ import org.example.model.ChessBoard;
 import org.example.model.Color;
 import org.example.service.BoardService.ChessBoardService;
 import org.example.service.BoardService.ChessBoardServiceImp;
+import org.example.service.BoardService.MoveToArchiveCSV;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Main {
 
     public static void main(String[] args) throws InterruptedException {
 
 //Dependency injection
+        UUID uuid = UUID.randomUUID();
+        String gameId = uuid.toString();
         ChessBoard chessBoard = new ChessBoard();
         ChessBoardService chessBoardService = new ChessBoardServiceImp(chessBoard);
-        Game game = new Game(chessBoardService, chessBoard);
+        MoveToArchiveCSV archive =  new MoveToArchiveCSV(chessBoardService, chessBoard, gameId);
+        Game game = new Game(chessBoardService, chessBoard, archive);
+
         List<Piece> test =new ArrayList<>( List.of(
                 new Pawn(chessBoardService, Color.WHITE,'B', 2),
                 new Pawn(chessBoardService, Color.WHITE,'C', 2),
