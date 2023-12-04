@@ -90,6 +90,14 @@ class PawnAbstractTest {
         assertFalse(pawn.isMoveValid("A2", "A3"));
     }
     @Test
+    void movePawnBlock2() {
+        Pawn pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 2);
+        Pawn opponentPawn = new Pawn(chessBoardServiceImp, Color.BLACK, 'A', 3);
+        list.addAll(Arrays.asList(pawn, opponentPawn));
+        chessBoard.setPieces(list);
+        assertFalse(pawn.isMoveValid("A2", "A4"));
+    }
+    @Test
     void moveElPassant_True() {
         Pawn pawn = new Pawn(chessBoardServiceImp, Color.WHITE, 'A', 4);
         Pawn opponentPawn = new Pawn(chessBoardServiceImp, Color.BLACK, 'B', 4);

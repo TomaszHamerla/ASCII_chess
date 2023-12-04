@@ -68,7 +68,13 @@ public  class Pawn implements Piece {
         }
     }
     private boolean itIsRegularMove(String start, String end) {
-        return !chessBoardServiceImp.isFieldOccupied(end) && start.charAt(0) == end.charAt(0);
+        List<String> fieldsBetween  = getFieldsBetween(start, end);
+        for ( String field : fieldsBetween){
+            if (chessBoardServiceImp.isFieldOccupied(field)){
+                return false;
+            }
+        }
+        return   start.charAt(0) == end.charAt(0);
     }
     private boolean itIsCaptureMove(String start, String end) {
         return  isValidCapture(start, end) && ( itIsRegularCapture(start, end) || itIsEnPassantCapture(start, end));
