@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.model.ChessBoard;
 import org.example.service.BoardService.ChessBoardService;
 import org.example.service.BoardService.MoveToArchiveCSV;
+
 import java.util.Scanner;
 
 import static org.example.pieces.UtilsOperation.*;
@@ -25,7 +26,6 @@ public class Game {
                 printTurn();
                 Scanner src = new Scanner(System.in);
                 if (isKingUnderAttack(chessBoardService)) {
-                    //TODO
                     if (isCheckmateSituation(chessBoardService)) {
                         System.out.println("Game Over !");
                         printWinner();
@@ -34,15 +34,15 @@ public class Game {
                     }
                     System.out.println("King is in check !");
                 }
-                if(isStalemate(chessBoardService)){
+                if (isStalemate(chessBoardService)) {
                     System.out.println("Game over, is stalemate !");
-                    gameOver=false;
+                    gameOver = false;
                     break;
                 }
                 System.out.print("Enter pawn location: ");
                 String pawnLocation = src.nextLine();
                 //TODO unmute WHITE TURN
-               // chessBoardService.validWhiteTurn(pawnLocation.toUpperCase());
+                chessBoardService.validWhiteTurn(pawnLocation.toUpperCase());
                 System.out.print("Enter expect pawn location: ");
                 String expectPawnLocation = src.nextLine();
 

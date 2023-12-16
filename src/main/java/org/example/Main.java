@@ -68,12 +68,12 @@ public class Main {
 
 //preparing game
 
-//        System.out.print("The game running");
-//        for (int i = 0; i < 5; i++) {
-//            System.out.print(" .");
-//            Thread.sleep(600);
-//        }
-//        System.out.println();
+        System.out.print("The game running");
+        for (int i = 0; i < 5; i++) {
+            System.out.print(" .");
+            Thread.sleep(600);
+        }
+        System.out.println();
 //start game
         game.run();
 

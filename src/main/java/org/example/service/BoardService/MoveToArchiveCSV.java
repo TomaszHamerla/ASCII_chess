@@ -1,8 +1,12 @@
 package org.example.service.BoardService;
+
 import lombok.Data;
 import org.example.model.ChessBoard;
 import org.example.pieces.Piece;
+
 import java.io.FileWriter;
+import java.io.File;
+import java.io.IOException;
 
 @Data
 public class MoveToArchiveCSV implements IMoveToArchiveCSV {
@@ -24,8 +28,9 @@ public class MoveToArchiveCSV implements IMoveToArchiveCSV {
         chessBoard.getMoves().add(move);
 
     }
+
     private void convertMoveToChessNotation(String end) {
-        Piece piece =  chessBoardService.getPiece(end).get();
+        Piece piece = chessBoardService.getPiece(end).get();
         char figureSymbol = mapPieceToChessNotation(piece);
         String move = figureSymbol + end;
         saveMoveToCSV(move);
@@ -40,17 +45,25 @@ public class MoveToArchiveCSV implements IMoveToArchiveCSV {
             case "Pawn" -> ' ';
             case "Queen" -> 'Q';
             case "Rook" -> 'R';
-            default -> throw new IllegalArgumentException("Maciek zjebał zapisywanie do pliku");
+            default -> throw new IllegalArgumentException("Save move to file failed");
         };
     }
-    private void saveMoveToCSV(String move) {
 
-        String filePath = "src/main/java/org/example/ArchiveCSV/" + gameId + ".csv";
-        try (FileWriter writer = new FileWriter(filePath, true)) {
-            writer.write(move + "\n");
-            writer.flush();
+    private void saveMoveToCSV(String move) {
+        String projectPath = System.getProperty("user.dir");
+        String filePath = projectPath + File.separator + "ASCII_chessMoves" + File.separator + gameId + ".csv";
+
+        try {
+            File file = new File(filePath);
+            file.getParentFile().mkdirs();
+
+            try (FileWriter writer = new FileWriter(file, true)) {
+                writer.write(move + "\n");
+            } catch (IOException e) {
+                System.out.println( e.getMessage());
+            }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println( e.getMessage());
         }
     }
 }
