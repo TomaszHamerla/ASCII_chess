@@ -1,4 +1,4 @@
-The program includes the movement rules for all chess pieces. Additionally, it takes into account the following aspects:
+## The program includes the movement rules for all chess pieces. Additionally, it takes into account the following aspects:
 
 1. Checkmate (mate): The condition where the opponent's king is in a position to be captured ('check') and there is no legal move to escape capture ('mate').
 
